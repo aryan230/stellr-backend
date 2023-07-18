@@ -104,6 +104,22 @@ app.post("/api/create-payment-intent", async (req, res) => {
   }
 });
 
+app.get("/people", (req, res) =>
+  res.json({
+    success: true,
+    items: [
+      {
+        profile_photo: "http://placehold.it/300x200",
+        name: "John Doe",
+      },
+      {
+        href: "http://placehold.it/300x200",
+        name: "Jane Doe",
+      },
+    ],
+  })
+);
+
 app.get("/api/config/razorpay", (req, res) =>
   res.send(process.env.RAZORPAY_KEY_ID)
 );
