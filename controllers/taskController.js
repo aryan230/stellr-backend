@@ -1,0 +1,42 @@
+import asyncHandler from "express-async-handler";
+import Task from "../models/taskModel.js";
+const addTask = asyncHandler(async (req, res) => {
+  const { projectId, subject, due_date, priority, status, assigned } = req.body;
+  const task = await Task.create({
+    project: projectId,
+    subject,
+    due_date,
+    priority,
+    status,
+    assigned,
+  });
+  if (task) {
+    res.status(201);
+    res.json({
+      _id: task._id,
+      project: task.project,
+      subject: task.name,
+      due_date: task.due_date,
+      priority: task.priority,
+      status: task.status,
+      assigned: task.assigned,
+    });
+  } else {
+    res.status();
+    throw new Error("Invalid Data");
+  }
+});
+
+const getAllTasks = asyncHandler(async (req, res) => {
+  const projectId = req.params.id;
+  const tasks = await Task.find({});
+  res.json(tasks);
+});
+
+const getMyTasks = asyncHandler(async (req, res) => {
+  const projectId = req.params.id;
+  const tasks = await Task.find({ project: projectId });
+  res.json(tasks);
+});
+
+export { addTask, getMyTasks, getAllTasks };

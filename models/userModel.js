@@ -30,6 +30,22 @@ const userSchema = mongoose.Schema(
       required: true,
       default: false,
     },
+    projectCollabs: [
+      {
+        project: {
+          type: mongoose.Schema.Types.ObjectId,
+          required: true,
+          ref: "Project",
+        },
+        userName: {
+          type: String,
+        },
+        userType: {
+          type: String,
+          default: "user",
+        },
+      },
+    ],
   },
   {
     timestamps: true,

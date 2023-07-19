@@ -5,6 +5,7 @@ import {
   getUserByID,
   getUserProfile,
   getUsers,
+  getUsersByEmail,
   googleAuth,
   microsoftAuth,
   registerUser,
@@ -14,6 +15,7 @@ import {
 import { admin, protect } from "../middleware/authMiddleware.js";
 const router = express.Router();
 
+router.post("/email", getUsersByEmail);
 router.post("/google", googleAuth);
 router.post("/microsoft", microsoftAuth);
 router.post("/login", authUser);
@@ -27,4 +29,5 @@ router
   .delete(protect, admin, deleteUser)
   .get(protect, admin, getUserByID)
   .put(protect, admin, updateUser);
+
 export default router;

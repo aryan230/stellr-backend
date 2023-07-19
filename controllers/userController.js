@@ -210,6 +210,12 @@ const getUsers = asyncHandler(async (req, res) => {
   res.json(users);
 });
 
+const getUsersByEmail = asyncHandler(async (req, res) => {
+  const { email } = req.body;
+  const user = await User.find({ email });
+  res.json(user);
+});
+
 const deleteUser = asyncHandler(async (req, res) => {
   const user = await User.findById(req.params.id);
   if (user) {
@@ -261,4 +267,5 @@ export {
   updateUser,
   googleAuth,
   microsoftAuth,
+  getUsersByEmail,
 };
