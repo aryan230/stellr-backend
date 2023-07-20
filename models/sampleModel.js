@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 import { boolean } from "webidl-conversions";
-const taskSchema = mongoose.Schema(
+const sampleSchema = mongoose.Schema(
   {
     project: {
       type: mongoose.Schema.Types.ObjectId,
@@ -12,18 +12,11 @@ const taskSchema = mongoose.Schema(
       required: true,
       ref: "User",
     },
-    subject: {
+    type: {
       type: String,
       required: true,
     },
-    due_date: {
-      type: String,
-      required: true,
-    },
-    priority: {
-      type: String,
-    },
-    status: {
+    data: {
       type: String,
     },
     assigned: [
@@ -46,6 +39,6 @@ const taskSchema = mongoose.Schema(
   }
 );
 
-const Task = mongoose.model("Task", taskSchema);
+const Sample = mongoose.model("Sample", sampleSchema);
 
-export default Task;
+export default Sample;

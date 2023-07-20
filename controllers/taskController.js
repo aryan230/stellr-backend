@@ -4,6 +4,7 @@ const addTask = asyncHandler(async (req, res) => {
   const { projectId, subject, due_date, priority, status, assigned } = req.body;
   const task = await Task.create({
     project: projectId,
+    user: req.user._id,
     subject,
     due_date,
     priority,
@@ -39,4 +40,9 @@ const getMyTasks = asyncHandler(async (req, res) => {
   res.json(tasks);
 });
 
-export { addTask, getMyTasks, getAllTasks };
+const getMyTasksPersonal = asyncHandler(async (req, res) => {
+  const tasks = await Task.find({ user: req.user._id });
+  res.json(tasks);
+});
+
+export { addTask, getMyTasks, getAllTasks, getMyTasksPersonal };
