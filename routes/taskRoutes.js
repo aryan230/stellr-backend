@@ -3,10 +3,13 @@ import { protect } from "../middleware/authMiddleware.js";
 import {
   addTask,
   getAllTasks,
+  getCollabTasks,
   getMyTasks,
   getMyTasksPersonal,
 } from "../controllers/taskController.js";
 const router = express.Router();
 router.route("/").post(protect, addTask).get(protect, getMyTasksPersonal);
 router.route("/:id").get(protect, getMyTasks);
+router.route("/all").get(getAllTasks);
+router.route("/collab/:id").get(protect, getCollabTasks);
 export default router;

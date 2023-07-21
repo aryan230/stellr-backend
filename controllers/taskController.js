@@ -29,7 +29,6 @@ const addTask = asyncHandler(async (req, res) => {
 });
 
 const getAllTasks = asyncHandler(async (req, res) => {
-  const projectId = req.params.id;
   const tasks = await Task.find({});
   res.json(tasks);
 });
@@ -45,4 +44,12 @@ const getMyTasksPersonal = asyncHandler(async (req, res) => {
   res.json(tasks);
 });
 
-export { addTask, getMyTasks, getAllTasks, getMyTasksPersonal };
+const getCollabTasks = asyncHandler(async (req, res) => {
+  const id = req.params.id;
+  const tasks = await Task.find({
+    "assigned.user": req.user._id,
+  });
+  res.json(tasks);
+});
+
+export { addTask, getMyTasks, getAllTasks, getMyTasksPersonal, getCollabTasks };

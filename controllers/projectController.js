@@ -1,6 +1,7 @@
 import Delivery from "../models/deliveryAdressModel.js";
 import Project from "../models/projectModel.js";
 import asyncHandler from "express-async-handler";
+import User from "../models/userModel.js";
 
 const addNewProject = asyncHandler(async (req, res) => {
   const { name, description } = req.body;
