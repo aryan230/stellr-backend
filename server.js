@@ -17,16 +17,20 @@ import passport from "passport";
 import cookieSession from "cookie-session";
 import sgMail from "@sendgrid/mail";
 import couponRoutes from "./routes/couponsRoutes.js";
-
+import firebaseRoutes from "./routes/firebaseRoutes.js";
+import firebaseConfig from "./config/firebase.js";
+import entryTemplateRoutes from "./routes/entryTemplateRoutes.js";
 const stripe = new Stripe(
   "sk_test_51MHPaRSGajuPx50dAJ7Y0JCA3PhfRiaMhWCpRUUKlCtos4sNQwsoU6vUfmmvgu3rZjed8Um8LgJl2JezunYyIvev009DR0aSRg"
 );
+
 dotenv.config();
 connectDB();
 const app = express();
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 app.use(cors());
 app.use(express.json());
+
 // ** MIDDLEWARE **
 // const whitelist = [
 //   "http://localhost:3000",
@@ -49,7 +53,9 @@ app.use(express.json());
 // app.use(cors(corsOptions));
 
 app.use("/api/users", userRoutes);
+app.use("/api/upload", firebaseRoutes);
 app.use("/api/projects", projectRoutes);
+app.use("/api/entry/templates", entryTemplateRoutes);
 app.use("/api/tasks", taskRoutes);
 app.use("/api/samples", sampleRoutes);
 app.use("/api/products", productRoutes);
