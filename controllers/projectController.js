@@ -62,6 +62,21 @@ const removeCollabrator = asyncHandler(async (req, res) => {
   }
 });
 
+const updateCollabRole = asyncHandler(async (req, res) => {
+  const { role, projectId, id } = req.body;
+  const project = await Project.findById(projectId);
+  if (project) {
+    let collabs = project.collaborators;
+    const objIndex = collabs.findIndex((el) => el.user == id);
+    collabs[objIndex].userType = role;
+    const updatedProject = await project.save();
+    res.json(updatedProject);
+  } else {
+    res.status(404);
+    throw new Error("No Project Found");
+  }
+});
+
 const getProjectsById = asyncHandler(async (req, res) => {
   const project = await Project.findById(req.params.id);
 
@@ -99,4 +114,5 @@ export {
   getCollabProjects,
   getAllProjects,
   removeCollabrator,
+  updateCollabRole,
 };

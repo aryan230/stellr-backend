@@ -7,6 +7,7 @@ import {
   getMyProjects,
   getProjectsById,
   removeCollabrator,
+  updateCollabRole,
 } from "../controllers/projectController.js";
 import { protect } from "../middleware/authMiddleware.js";
 const router = express.Router();
@@ -19,4 +20,5 @@ router
   .post(protect, addCollabrator)
   .delete(protect, removeCollabrator);
 router.route("/collab/:id").get(protect, getCollabProjects);
+router.route("/collab/update").post(protect, updateCollabRole);
 export default router;

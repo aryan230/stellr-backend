@@ -28,6 +28,10 @@ const projectSchema = mongoose.Schema(
           type: String,
           default: "user",
         },
+        permissions: {
+          type: String,
+          default: "",
+        },
       },
     ],
   },
