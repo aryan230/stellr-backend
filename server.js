@@ -194,5 +194,9 @@ if (process.env.NODE_ENV === "production") {
 app.use(notFound);
 app.use(errorHandler);
 const PORT = process.env.PORT || 3002;
-app.listen(PORT, console.log("Server running on port 5000"));
-httpServer.listen(3003);
+const SOCKET_PORT = process.env.PORT || 3003;
+app.listen(PORT, console.log(`Server running on port ${PORT}`));
+httpServer.listen(
+  SOCKET_PORT,
+  console.log(`socket running on port ${SOCKET_PORT}`)
+);
