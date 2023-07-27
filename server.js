@@ -20,9 +20,31 @@ import couponRoutes from "./routes/couponsRoutes.js";
 import firebaseRoutes from "./routes/firebaseRoutes.js";
 import firebaseConfig from "./config/firebase.js";
 import entryTemplateRoutes from "./routes/entryTemplateRoutes.js";
+import { Server } from "socket.io";
+import { createServer } from "http";
+
 const stripe = new Stripe(
   "sk_test_51MHPaRSGajuPx50dAJ7Y0JCA3PhfRiaMhWCpRUUKlCtos4sNQwsoU6vUfmmvgu3rZjed8Um8LgJl2JezunYyIvev009DR0aSRg"
 );
+const httpServer = createServer();
+
+const io = new Server(httpServer, {
+  cors: {
+    origin: "http://localhost:3000",
+    methods: ["GET", "POST"],
+  },
+});
+
+io.on("connection", (socket) => {
+  socket.on("get-document", (documentId) => {
+    const data = "";
+    socket.join(documentId);
+    socket.emit("load-document", data);
+    socket.on("send-changes", (delta) => {
+      socket.broadcast.to(documentId).emit("receive-changes", delta);
+    });
+  });
+});
 
 dotenv.config();
 connectDB();
@@ -30,7 +52,6 @@ const app = express();
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 app.use(cors());
 app.use(express.json());
-
 // ** MIDDLEWARE **
 // const whitelist = [
 //   "http://localhost:3000",
@@ -174,3 +195,4 @@ app.use(notFound);
 app.use(errorHandler);
 const PORT = process.env.PORT || 3002;
 app.listen(PORT, console.log("Server running on port 5000"));
+httpServer.listen(3003);
