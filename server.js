@@ -76,7 +76,7 @@ io.on("connection", (socket) => {
     });
 
     socket.on("save-document", async (data) => {
-      console.log(data);
+      console.log(data.data.ops);
       const entry = await Entry.findById(documentId);
       entry.data = [
         {
