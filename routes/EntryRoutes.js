@@ -1,13 +1,13 @@
 import express from "express";
-import {
-  addNewProject,
-  getMyProjects,
-  getProjectsById,
-} from "../controllers/projectController.js";
 import { protect } from "../middleware/authMiddleware.js";
+import {
+  addNewEntry,
+  getEntriesById,
+  getMyEntries,
+} from "../controllers/entryController.js";
 const router = express.Router();
-router.route("/myprojects").get(protect, getMyProjects);
-router.route("/:id").get(getProjectsById);
-router.route("/").post(protect, addNewProject);
+router.route("/myentry").get(protect, getMyEntries);
+router.route("/:id").get(getMyEntries);
+router.route("/").post(protect, addNewEntry);
 
 export default router;

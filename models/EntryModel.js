@@ -2,11 +2,6 @@ import mongoose from "mongoose";
 import { boolean } from "webidl-conversions";
 const entrySchema = mongoose.Schema(
   {
-    user: {
-      type: mongoose.Schema.Types.ObjectId,
-      required: true,
-      ref: "User",
-    },
     project: {
       type: mongoose.Schema.Types.ObjectId,
       required: true,
@@ -16,15 +11,19 @@ const entrySchema = mongoose.Schema(
       type: String,
       required: true,
     },
-    block: {
-      time: {
-        type: Number,
+    data: [
+      {
+        user: {
+          type: mongoose.Schema.Types.ObjectId,
+          required: true,
+          ref: "User",
+        },
+        block: Object,
+        date: {
+          type: Number,
+        },
       },
-      version: {
-        type: Number,
-      },
-      blocks: [],
-    },
+    ],
   },
   {
     timestamps: true,
