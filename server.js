@@ -18,7 +18,7 @@ import cookieSession from "cookie-session";
 import sgMail from "@sendgrid/mail";
 import couponRoutes from "./routes/couponsRoutes.js";
 import firebaseRoutes from "./routes/firebaseRoutes.js";
-import entryRoutes from "./routes/entryRoutes.js";
+import entryRoutes from "./routes/EntryRoutes.js";
 import firebaseConfig from "./config/firebase.js";
 import entryTemplateRoutes from "./routes/entryTemplateRoutes.js";
 import { Server } from "socket.io";
