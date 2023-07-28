@@ -6,7 +6,6 @@ import {
   getMyEntries,
 } from "../controllers/entryController.js";
 const router = express.Router();
-router.route("/myentry").get(protect, getMyEntries);
 router.route("/:id").get(getMyEntries);
 router.route("/").post(protect, addNewEntry);
 
