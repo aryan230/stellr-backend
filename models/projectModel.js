@@ -26,7 +26,7 @@ const projectSchema = mongoose.Schema(
         },
         userType: {
           type: String,
-          default: "user",
+          default: "Read",
         },
         permissions: {
           type: String,

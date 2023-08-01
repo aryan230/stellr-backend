@@ -4,7 +4,7 @@ const sampleSchema = mongoose.Schema(
   {
     project: {
       type: mongoose.Schema.Types.ObjectId,
-      required: true,
+      required: false,
       ref: "Project",
     },
     user: {

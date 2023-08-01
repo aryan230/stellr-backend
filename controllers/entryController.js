@@ -38,4 +38,18 @@ const getMyEntries = asyncHandler(async (req, res) => {
   res.json(entries);
 });
 
-export { getEntriesById, addNewEntry, getMyEntries };
+const addEntryLogs = asyncHandler(async (req, res) => {
+  const { entryId, logDetails } = req.body;
+  const entry = await Entry.findById(entryId);
+  if (entry) {
+    let newLogs = entry.logs;
+    newLogs.push(logDetails);
+    entry.logs = newLogs;
+    const updatedEntry = await entry.save();
+    res.json(updatedEntry);
+  } else {
+    throw new Error(" No entry with id");
+  }
+});
+
+export { getEntriesById, addNewEntry, getMyEntries, addEntryLogs };
