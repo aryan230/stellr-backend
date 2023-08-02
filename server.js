@@ -77,15 +77,16 @@ io.on("connection", (socket) => {
 
     socket.on("save-document", async (data) => {
       console.log(data.data.ops);
-      const entry = await Entry.findById(documentId);
-      entry.data = [
-        {
+      await Entry.findByIdAndUpdate(documentId, {
+        data: {
           user: data.user,
           block: data.data,
           date: Date.now(),
         },
-      ];
-      const updatedEntry = await entry.save();
+      });
+      // const entry = await Entry.findById(documentId);
+      // entry.data = [,];
+      // const updatedEntry = await entry.save();
     });
   });
 });

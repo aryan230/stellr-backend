@@ -52,4 +52,30 @@ const getCollabTasks = asyncHandler(async (req, res) => {
   res.json(tasks);
 });
 
-export { addTask, getMyTasks, getAllTasks, getMyTasksPersonal, getCollabTasks };
+const updateTask = asyncHandler(async (req, res) => {
+  const task = await Task.findById(req.params.id);
+  if (task) {
+    (task.subject = req.body.subject || task.subject),
+      (task.priority = req.body.priority || task.priority),
+      (task.status = req.body.status || task.status);
+    const updatedTask = await task.save();
+    res.json({
+      _id: updatedTask._id,
+      subject: updatedTask.subject,
+      priority: updatedTask.priority,
+      status: updatedTask.status,
+    });
+  } else {
+    res.status(404);
+    throw new Error("No Project Found");
+  }
+});
+
+export {
+  addTask,
+  getMyTasks,
+  getAllTasks,
+  getMyTasksPersonal,
+  getCollabTasks,
+  updateTask,
+};

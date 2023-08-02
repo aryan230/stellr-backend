@@ -8,11 +8,12 @@ import {
   getProjectsById,
   removeCollabrator,
   updateCollabRole,
+  updateProjectProfile,
 } from "../controllers/projectController.js";
 import { protect } from "../middleware/authMiddleware.js";
 const router = express.Router();
 router.route("/myprojects").get(protect, getMyProjects);
-router.route("/:id").get(getProjectsById);
+router.route("/:id").get(getProjectsById).put(protect, updateProjectProfile);
 router.route("/").post(protect, addNewProject);
 router.route("/").get(protect, getAllProjects);
 router

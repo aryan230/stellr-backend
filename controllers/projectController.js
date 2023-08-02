@@ -23,6 +23,23 @@ const addNewProject = asyncHandler(async (req, res) => {
   }
 });
 
+const updateProjectProfile = asyncHandler(async (req, res) => {
+  const project = await Project.findById(req.params.id);
+  if (project) {
+    (project.name = req.body.name || project.name),
+      (project.description = req.body.description || project.description);
+    const updatedProject = await project.save();
+    res.json({
+      _id: updatedProject._id,
+      name: updatedProject.name,
+      description: updatedProject.description,
+    });
+  } else {
+    res.status(404);
+    throw new Error("No Project Found");
+  }
+});
+
 const addCollabrator = asyncHandler(async (req, res) => {
   const { projectId, collabDetails } = req.body;
   const project = await Project.findById(projectId);
@@ -115,4 +132,5 @@ export {
   getAllProjects,
   removeCollabrator,
   updateCollabRole,
+  updateProjectProfile,
 };
