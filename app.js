@@ -24,7 +24,7 @@ import entryTemplateRoutes from "./routes/entryTemplateRoutes.js";
 import { Server } from "socket.io";
 import http from "http";
 import Entry from "./models/EntryModel.js";
-
+import organizationRoutes from "./routes/organizationRoutes.js";
 const stripe = new Stripe(
   "sk_test_51MHPaRSGajuPx50dAJ7Y0JCA3PhfRiaMhWCpRUUKlCtos4sNQwsoU6vUfmmvgu3rZjed8Um8LgJl2JezunYyIvev009DR0aSRg"
 );
@@ -100,6 +100,7 @@ async function findOrCreateDocument(id) {
 app.use("/api/users", userRoutes);
 app.use("/api/upload", firebaseRoutes);
 app.use("/api/projects", projectRoutes);
+app.use("/api/organs", organizationRoutes);
 app.use("/api/entries", entryRoutes);
 app.use("/api/entry/templates", entryTemplateRoutes);
 app.use("/api/tasks", taskRoutes);
