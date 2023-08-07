@@ -36,7 +36,11 @@ const server = http.createServer(app);
 
 const io = new Server(server, {
   cors: {
-    origin: ["http://localhost:3000", "https://stellr-app.vercel.app"],
+    origin: [
+      "http://localhost:3000",
+      "https://stellr-app.vercel.app",
+      "https://app.getstellr.io",
+    ],
     methods: ["GET", "POST"],
   },
 });
@@ -219,5 +223,5 @@ if (process.env.NODE_ENV === "production") {
 
 app.use(notFound);
 app.use(errorHandler);
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 3002;
 server.listen(PORT, console.log(`Server running on port ${PORT}`));
