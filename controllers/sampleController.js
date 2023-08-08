@@ -33,4 +33,19 @@ const getMySamples = asyncHandler(async (req, res) => {
   res.json(sample);
 });
 
-export { addSample, getMySamples, getAllSamples };
+const updateSampleProfile = asyncHandler(async (req, res) => {
+  const project = await Sample.findById(req.params.id);
+  if (project) {
+    project.data = req.body.data || project.data;
+    const updatedProject = await project.save();
+    res.json({
+      _id: updatedProject._id,
+      data: updatedProject.data,
+    });
+  } else {
+    res.status(404);
+    throw new Error("No Sample Found");
+  }
+});
+
+export { addSample, getMySamples, getAllSamples, updateSampleProfile };

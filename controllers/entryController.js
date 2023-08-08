@@ -52,4 +52,25 @@ const addEntryLogs = asyncHandler(async (req, res) => {
   }
 });
 
-export { getEntriesById, addNewEntry, getMyEntries, addEntryLogs };
+const updateEntryProfile = asyncHandler(async (req, res) => {
+  const project = await Entry.findById(req.params.id);
+  if (project) {
+    project.name = req.body.name || project.name;
+    const updatedProject = await project.save();
+    res.json({
+      _id: updatedProject._id,
+      name: updatedProject.name,
+    });
+  } else {
+    res.status(404);
+    throw new Error("No Entry Found");
+  }
+});
+
+export {
+  getEntriesById,
+  addNewEntry,
+  getMyEntries,
+  addEntryLogs,
+  updateEntryProfile,
+};
