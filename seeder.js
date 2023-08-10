@@ -8,6 +8,7 @@ import connectDB from "./config/db.js";
 import Coupons from "./models/coupons.js";
 import coupons from "./data/coupons.js";
 import Task from "./models/taskModel.js";
+import Organization from "./models/organizationModel.js";
 
 dotenv.config();
 connectDB();
@@ -36,7 +37,7 @@ const importData = async () => {
 
 const destroyData = async () => {
   try {
-    await Task.deleteMany();
+    await Organization.deleteMany();
     // await Course.deleteMany();
     // await User.deleteMany();
     // await Order.deleteMany();

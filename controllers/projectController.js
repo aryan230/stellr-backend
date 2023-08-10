@@ -2,6 +2,7 @@ import Delivery from "../models/deliveryAdressModel.js";
 import Project from "../models/projectModel.js";
 import asyncHandler from "express-async-handler";
 import User from "../models/userModel.js";
+import Organization from "../models/organizationModel.js";
 
 const addNewProject = asyncHandler(async (req, res) => {
   const { name, description } = req.body;
@@ -51,6 +52,30 @@ const addCollabrator = asyncHandler(async (req, res) => {
     } else {
       collabs.push(collabDetails);
       project.collaborators = collabs;
+      const updatedProject = await project.save();
+      res.json(updatedProject);
+    }
+  } else {
+    res.status(404);
+    throw new Error("No Project Found");
+  }
+});
+
+const addOrganization = asyncHandler(async (req, res) => {
+  const { projectId, organizationId } = req.body;
+  const project = await Project.findById(projectId);
+  if (project) {
+    let organizations = project.organizations;
+    const found = organizations.some((el) => el.organization == organizationId);
+    if (found) {
+      throw new Error("Organization Already Exists in Project");
+    } else {
+      const org = await Organization.findById(organizationId);
+      organizations.push({
+        organization: organizationId,
+        organizationName: org.name,
+      });
+      project.organizations = organizations;
       const updatedProject = await project.save();
       res.json(updatedProject);
     }
@@ -118,6 +143,17 @@ const getCollabProjects = asyncHandler(async (req, res) => {
   res.json(projects);
 });
 
+const getOrganizationProjects = asyncHandler(async (req, res) => {
+  const id = req.user._id;
+  const org = await Organization.find({
+    $or: [{ "collaborators.user": req.user._id }, { user: req.user._id }],
+  });
+  const projects = await Project.find({
+    "organizations.organization": org[0]._id,
+  });
+  res.json(projects);
+});
+
 const getAllProjects = asyncHandler(async (req, res) => {
   const projects = await Project.find({});
   res.json(projects);
@@ -133,4 +169,6 @@ export {
   removeCollabrator,
   updateCollabRole,
   updateProjectProfile,
+  addOrganization,
+  getOrganizationProjects,
 };

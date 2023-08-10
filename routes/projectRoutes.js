@@ -2,9 +2,11 @@ import express from "express";
 import {
   addCollabrator,
   addNewProject,
+  addOrganization,
   getAllProjects,
   getCollabProjects,
   getMyProjects,
+  getOrganizationProjects,
   getProjectsById,
   removeCollabrator,
   updateCollabRole,
@@ -21,5 +23,7 @@ router
   .post(protect, addCollabrator)
   .delete(protect, removeCollabrator);
 router.route("/collab/:id").get(protect, getCollabProjects);
+router.route("/org").post(protect, addOrganization);
 router.route("/collab/update").post(protect, updateCollabRole);
+router.route("/org/:id").get(protect, getOrganizationProjects);
 export default router;

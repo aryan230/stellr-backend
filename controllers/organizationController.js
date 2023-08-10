@@ -34,25 +34,73 @@ const getCollabOrganizations = asyncHandler(async (req, res) => {
   res.json(organs);
 });
 
-const addCollabratorOrg = asyncHandler(async (req, res) => {
+const joinAnOrg = asyncHandler(async (req, res) => {
   const { orgId, collabDetails } = req.body;
-  const project = await Organization.findById(orgId);
-  if (project) {
-    let collabs = project.collaborators;
-    const found = collabs.some((el) => el.user == collabDetails.user);
-    if (found) {
-      throw new Error("User Already Exists in Project");
+  const userOrg = await Organization.find({
+    user: collabDetails.user,
+  });
+  const userOrgCollab = await Organization.find({
+    "collaborators.user": collabDetails.user,
+  });
+  console.log(userOrg);
+  console.log(userOrgCollab);
+  if (userOrg.length === 0 && userOrgCollab.length === 0) {
+    const project = await Organization.findById(orgId);
+    if (project) {
+      let collabs = project.collaborators;
+      const found = collabs.some((el) => el.user == collabDetails.user);
+      if (found) {
+        res.status(401);
+        throw new Error("User Already Exists in Project");
+      } else {
+        collabs.push(collabDetails);
+        project.collaborators = collabs;
+        const updatedProject = await project.save();
+        res.json(updatedProject);
+      }
     } else {
-      collabs.push(collabDetails);
-      project.collaborators = collabs;
-      const updatedProject = await project.save();
-      res.json(updatedProject);
+      res.status(404);
+      throw new Error("No Project Found");
     }
   } else {
-    res.status(404);
-    throw new Error("No Project Found");
+    throw new Error("User already exists in another organization");
   }
 });
+
+const addCollabratorOrg = asyncHandler(async (req, res) => {
+  const { orgId, collabDetails } = req.body;
+  const userOrg = await Organization.find({
+    user: collabDetails.user,
+  });
+  const userOrgCollab = await Organization.find({
+    "collaborators.user": collabDetails.user,
+  });
+  console.log(userOrg);
+  console.log(userOrgCollab);
+  if (userOrg.length === 0 && userOrgCollab.length === 0) {
+    const project = await Organization.findById(orgId);
+    if (project) {
+      let collabs = project.collaborators;
+      const found = collabs.some((el) => el.user == collabDetails.user);
+      if (found) {
+        res.status(401);
+        throw new Error("User Already Exists in Project");
+      } else {
+        collabs.push(collabDetails);
+        project.collaborators = collabs;
+        const updatedProject = await project.save();
+        res.json(updatedProject);
+      }
+    } else {
+      res.status(404);
+      throw new Error("No Project Found");
+    }
+  } else {
+    throw new Error("User already exists in another organization");
+  }
+});
+
+//
 
 const removeCollabratorOrg = asyncHandler(async (req, res) => {
   const { projectId, collabDetails } = req.body;
@@ -95,4 +143,5 @@ export {
   removeCollabratorOrg,
   addCollabratorOrg,
   updateCollabRoleOrg,
+  joinAnOrg,
 };

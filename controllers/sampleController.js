@@ -3,10 +3,12 @@ import Sample from "../models/sampleModel.js";
 
 const addSample = asyncHandler(async (req, res) => {
   const { type, data, assigned } = req.body;
+  const samples = await Sample.find({ user: req.user._id });
   const sample = await Sample.create({
     user: req.user._id,
     type,
     data,
+    sampleId: samples.length + 1,
   });
   if (sample) {
     res.status(201);
@@ -29,7 +31,7 @@ const getAllSamples = asyncHandler(async (req, res) => {
 
 const getMySamples = asyncHandler(async (req, res) => {
   const projectId = req.params.id;
-  const sample = await Sample.find({ user: projectId });
+  const sample = await Sample.find({ user: req.user._id });
   res.json(sample);
 });
 

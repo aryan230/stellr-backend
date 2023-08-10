@@ -34,6 +34,16 @@ const projectSchema = mongoose.Schema(
         },
       },
     ],
+    organizations: [
+      {
+        organization: {
+          type: String,
+        },
+        organizationName: {
+          type: String,
+        },
+      },
+    ],
   },
   {
     timestamps: true,

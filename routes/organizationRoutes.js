@@ -16,6 +16,7 @@ import {
   addNewOrganization,
   getCollabOrganizations,
   getMyOrganizations,
+  joinAnOrg,
   removeCollabratorOrg,
   updateCollabRoleOrg,
 } from "../controllers/organizationController.js";
@@ -29,5 +30,6 @@ router
   .post(protect, addCollabratorOrg)
   .delete(protect, removeCollabratorOrg);
 router.route("/collab/:id").get(protect, getCollabOrganizations);
+router.route("/join").post(protect, joinAnOrg);
 router.route("/collab/update").post(protect, updateCollabRoleOrg);
 export default router;

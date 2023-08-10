@@ -19,6 +19,9 @@ const sampleSchema = mongoose.Schema(
     data: {
       type: String,
     },
+    sampleId: {
+      type: Number,
+    },
     assigned: [
       {
         user: {

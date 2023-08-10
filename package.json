@@ -10,7 +10,7 @@
     "client": "npm start --prefix thehcc",
     "dev": "concurrently \"npm run start\" \"npm run client\"",
     "data:import": "node seeder",
-    "data:destroy": "node backend/seeder -d"
+    "data:destroy": "node seeder -d"
   },
   "dependencies": {
     "@sendgrid/mail": "^7.7.0",

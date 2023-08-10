@@ -15,7 +15,16 @@ const organizationSchema = mongoose.Schema(
       type: String,
       required: true,
     },
-
+    projects: [
+      {
+        project: {
+          type: String,
+        },
+        projectName: {
+          type: String,
+        },
+      },
+    ],
     collaborators: [
       {
         user: {
