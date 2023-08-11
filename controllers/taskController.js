@@ -57,7 +57,8 @@ const updateTask = asyncHandler(async (req, res) => {
   if (task) {
     (task.subject = req.body.subject || task.subject),
       (task.priority = req.body.priority || task.priority),
-      (task.status = req.body.status || task.status);
+      (task.status = req.body.status || task.status),
+      (task.due_date = req.body.due_date || task.due_date);
     const updatedTask = await task.save();
     res.json({
       _id: updatedTask._id,
