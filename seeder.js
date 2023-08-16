@@ -9,6 +9,11 @@ import Coupons from "./models/coupons.js";
 import coupons from "./data/coupons.js";
 import Task from "./models/taskModel.js";
 import Organization from "./models/organizationModel.js";
+import Project from "./models/projectModel.js";
+import Sample from "./models/sampleModel.js";
+import Entry from "./models/EntryModel.js";
+import Protocol from "./models/protocolModel.js";
+import SOP from "./models/sopModel.js";
 
 dotenv.config();
 connectDB();
@@ -38,6 +43,13 @@ const importData = async () => {
 const destroyData = async () => {
   try {
     await Organization.deleteMany();
+    await User.deleteMany();
+    await Project.deleteMany();
+    await Sample.deleteMany();
+    await Entry.deleteMany();
+    await Task.deleteMany();
+    await Protocol.deleteMany();
+    await SOP.deleteMany();
     // await Course.deleteMany();
     // await User.deleteMany();
     // await Order.deleteMany();
