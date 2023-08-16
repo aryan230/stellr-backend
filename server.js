@@ -27,12 +27,20 @@ import { Server } from "socket.io";
 import http from "http";
 import Entry from "./models/EntryModel.js";
 import organizationRoutes from "./routes/organizationRoutes.js";
+import axios from "axios";
+import FormData from "form-data";
+import Mailgun from "mailgun.js";
 const stripe = new Stripe(
   "sk_test_51MHPaRSGajuPx50dAJ7Y0JCA3PhfRiaMhWCpRUUKlCtos4sNQwsoU6vUfmmvgu3rZjed8Um8LgJl2JezunYyIvev009DR0aSRg"
 );
 
 dotenv.config();
 connectDB();
+const mailgun = new Mailgun(FormData);
+const client = mailgun.client({
+  username: "api",
+  key: process.env.MAILGUN_API_KEY,
+});
 const app = express();
 const server = http.createServer(app);
 
@@ -117,34 +125,52 @@ app.use("/api/products", productRoutes);
 app.use("/api/orders", orderRoutes);
 app.use("/api/delivery", deliveryAdressRoutes);
 app.use("/api/coupons", couponRoutes);
-app.get("/api/sendEmail", (req, res) => {
-  const msg = {
-    to: "gabru2306@gmail.com", // Change to your recipient
-    from: "aryan@thehonestcareerco.in",
-    dynamic_template_data: {
-      name: "Aryan",
-      id: "123",
-    },
-    // Change to your verified sender
-    subject: "Sending with SendGrid is Fun",
-    template_id: "d-5888185181df49bd8485dc6cdfebbd87",
-    text: "and easy to do anywhere, even with Node.js",
-    html: "<strong>and easy to do anywhere, even with Node.js</strong>",
+// app.get("/api/sendEmail", (req, res) => {
+//   const msg = {
+//     to: "gabru2306@gmail.com", // Change to your recipient
+//     from: "aryan@thehonestcareerco.in",
+//     dynamic_template_data: {
+//       name: "Aryan",
+//       id: "123",
+//     },
+//     // Change to your verified sender
+//     subject: "Sending with SendGrid is Fun",
+//     template_id: "d-5888185181df49bd8485dc6cdfebbd87",
+//     text: "and easy to do anywhere, even with Node.js",
+//     html: "<strong>and easy to do anywhere, even with Node.js</strong>",
+//   };
+//   sgMail
+//     .send(msg)
+//     .then(() => {
+//       console.log("Email sent");
+//       res.send("Message sent");
+//     })
+//     .catch((error) => {
+//       console.error(error);
+//     });
+// });
+
+app.get("/api/sendEmail", async (req, res) => {
+  const messageData = {
+    from: "Excited User <me@getstellr.io>",
+    to: "aryan.a@futurecloud.in",
+    subject: "Hello",
+    text: "Testing some Mailgun awesomeness!",
   };
-  sgMail
-    .send(msg)
-    .then(() => {
-      console.log("Email sent");
-      res.send("Message sent");
+
+  client.messages
+    .create("getstellr.io", messageData)
+    .then((res) => {
+      console.log(res);
     })
-    .catch((error) => {
-      console.error(error);
+    .catch((err) => {
+      console.error(err);
     });
 });
 
-app.get("/api/config/stripe", (req, res) => {
+app.get("/api/config/openai", (req, res) => {
   res.send({
-    publishableKey: process.env.STRIPE_PUBLISHABLE_KEY,
+    apikey: process.env.OPEN_API_KEY,
   });
 });
 

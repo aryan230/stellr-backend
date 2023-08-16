@@ -3,6 +3,7 @@ import {
   authUser,
   deleteUser,
   getUserByID,
+  getUserMetrics,
   getUserProfile,
   getUsers,
   getUsersByEmail,
@@ -24,6 +25,9 @@ router
   .route("/profile")
   .get(protect, getUserProfile)
   .put(protect, updateUserProfile);
+
+router.route("/userMetrics").get(protect, admin, getUserMetrics);
+
 router
   .route("/:id")
   .delete(protect, admin, deleteUser)

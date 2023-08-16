@@ -1,6 +1,12 @@
 import User from "../models/userModel.js";
 import asyncHandler from "express-async-handler";
 import generateToken from "../utils/generateToken.js";
+import Task from "../models/taskModel.js";
+import Protocol from "../models/protocolModel.js";
+import Project from "../models/projectModel.js";
+import Organization from "../models/organizationModel.js";
+import Entry from "../models/EntryModel.js";
+import Sample from "../models/sampleModel.js";
 
 const googleAuth = asyncHandler(async (req, res) => {
   const { email, name, type } = req.body;
@@ -256,6 +262,26 @@ const updateUser = asyncHandler(async (req, res) => {
   }
 });
 
+const getUserMetrics = asyncHandler(async (req, res) => {
+  const users = await User.find({});
+  const samples = await Sample.find({});
+  const projects = await Project.find({});
+  const organizations = await Organization.find({});
+  const entries = await Entry.find({});
+  const tasks = await Task.find({});
+  const protocols = await Protocol.find({});
+
+  res.json({
+    users,
+    samples,
+    projects,
+    organizations,
+    entries,
+    tasks,
+    protocols,
+  });
+});
+
 export {
   authUser,
   getUserProfile,
@@ -268,4 +294,5 @@ export {
   googleAuth,
   microsoftAuth,
   getUsersByEmail,
+  getUserMetrics,
 };
