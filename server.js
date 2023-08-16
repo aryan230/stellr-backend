@@ -174,6 +174,8 @@ app.get("/api/config/openai", (req, res) => {
   });
 });
 
+console.log("Hello word");
+
 app.post("/api/create-payment-intent", async (req, res) => {
   const { amount } = req.body;
   try {
