@@ -31,7 +31,7 @@ router.route("/userMetrics").get(protect, admin, getUserMetrics);
 router
   .route("/:id")
   .delete(protect, admin, deleteUser)
-  .get(protect, admin, getUserByID)
+  .get(protect, getUserByID)
   .put(protect, admin, updateUser);
 
 export default router;

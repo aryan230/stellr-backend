@@ -159,6 +159,20 @@ const getAllProjects = asyncHandler(async (req, res) => {
   res.json(projects);
 });
 
+const addProjectLogs = asyncHandler(async (req, res) => {
+  const { entryId, logDetails } = req.body;
+  const entry = await Project.findById(entryId);
+  if (entry) {
+    let newLogs = entry.logs;
+    newLogs.push(logDetails);
+    entry.logs = newLogs;
+    const updatedEntry = await entry.save();
+    res.json(updatedEntry);
+  } else {
+    throw new Error(" No project with id");
+  }
+});
+
 export {
   getProjectsById,
   addNewProject,
@@ -171,4 +185,5 @@ export {
   updateProjectProfile,
   addOrganization,
   getOrganizationProjects,
+  addProjectLogs,
 };
