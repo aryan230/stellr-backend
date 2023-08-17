@@ -46,6 +46,13 @@ const userSchema = mongoose.Schema(
         },
       },
     ],
+    activeStatus: [
+      {
+        date: {
+          type: String,
+        },
+      },
+    ],
   },
   {
     timestamps: true,

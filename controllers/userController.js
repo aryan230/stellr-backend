@@ -282,6 +282,30 @@ const getUserMetrics = asyncHandler(async (req, res) => {
   });
 });
 
+const addUserActiveStatus = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.user._id);
+  if (user) {
+    let activeLogs = user.activeStatus;
+    const todaysDate = new Date().toLocaleString();
+    const findTodaysLog = await activeLogs.find(
+      (e) => e.date.split(",")[0] == todaysDate.split(",")[0]
+    );
+    if (!findTodaysLog) {
+      activeLogs.push({
+        date: todaysDate,
+      });
+      user.activeStatus = activeLogs;
+      const updatedUser = await user.save();
+      res.json(updatedUser);
+    } else {
+      throw new Error("Log already exists for today");
+    }
+    console.log(findTodaysLog);
+  } else {
+    throw new Error(" No entry with id");
+  }
+});
+
 export {
   authUser,
   getUserProfile,
@@ -295,4 +319,5 @@ export {
   microsoftAuth,
   getUsersByEmail,
   getUserMetrics,
+  addUserActiveStatus,
 };

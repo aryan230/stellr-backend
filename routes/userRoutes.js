@@ -1,5 +1,6 @@
 import express from "express";
 import {
+  addUserActiveStatus,
   authUser,
   deleteUser,
   getUserByID,
@@ -25,6 +26,7 @@ router
   .route("/profile")
   .get(protect, getUserProfile)
   .put(protect, updateUserProfile);
+router.route("/status").post(protect, addUserActiveStatus);
 
 router.route("/userMetrics").get(protect, admin, getUserMetrics);
 
