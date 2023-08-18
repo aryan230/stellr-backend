@@ -50,6 +50,7 @@ const io = new Server(server, {
       "http://localhost:3000",
       "https://stellr-app.vercel.app",
       "https://app.getstellr.io",
+      "https://staging.getstellr.io",
     ],
     methods: ["GET", "POST"],
   },
