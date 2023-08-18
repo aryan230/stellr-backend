@@ -42,14 +42,14 @@ const importData = async () => {
 
 const destroyData = async () => {
   try {
-    await Organization.deleteMany();
-    await User.deleteMany();
-    await Project.deleteMany();
-    await Sample.deleteMany();
-    await Entry.deleteMany();
-    await Task.deleteMany();
-    await Protocol.deleteMany();
-    await SOP.deleteMany();
+    // await Organization.deleteMany();
+    // await User.deleteMany();
+    // await Project.deleteMany();
+    // await Sample.deleteMany();
+    // await Entry.deleteMany();
+    // await Task.deleteMany();
+    // await Protocol.deleteMany();
+    // await SOP.deleteMany();
     // await Course.deleteMany();
     // await User.deleteMany();
     // await Order.deleteMany();
