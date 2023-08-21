@@ -72,6 +72,20 @@ const updateTask = asyncHandler(async (req, res) => {
   }
 });
 
+const addTaskLogs = asyncHandler(async (req, res) => {
+  const { entryId, logDetails } = req.body;
+  const entry = await Task.findById(entryId);
+  if (entry) {
+    let newLogs = entry.logs;
+    newLogs.push(logDetails);
+    entry.logs = newLogs;
+    const updatedEntry = await entry.save();
+    res.json(updatedEntry);
+  } else {
+    throw new Error(" No task with id");
+  }
+});
+
 export {
   addTask,
   getMyTasks,
@@ -79,4 +93,5 @@ export {
   getMyTasksPersonal,
   getCollabTasks,
   updateTask,
+  addTaskLogs,
 };
