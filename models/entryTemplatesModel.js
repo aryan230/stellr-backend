@@ -7,6 +7,10 @@ const entryTemplateSchema = mongoose.Schema(
       required: true,
       ref: "User",
     },
+    deleted: {
+      type: Boolean,
+      default: false,
+    },
     name: {
       type: String,
       required: true,

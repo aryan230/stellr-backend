@@ -3,18 +3,12 @@ import Sample from "../models/sampleModel.js";
 import Protocol from "../models/protocolModel.js";
 
 const addProtocol = asyncHandler(async (req, res) => {
-  const { title, objective, scope, procedure, materials, safety, results } =
-    req.body;
+  const { title, data } = req.body;
   const protocols = await Protocol.find({ user: req.user._id });
   const protocol = await Protocol.create({
     user: req.user._id,
     title,
-    objective,
-    scope,
-    procedure,
-    materials,
-    safety,
-    results,
+    data,
     protocolId: protocols.length + 1,
   });
   if (protocol) {

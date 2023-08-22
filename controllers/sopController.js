@@ -4,28 +4,13 @@ import Protocol from "../models/protocolModel.js";
 import SOP from "../models/sopModel.js";
 
 const addSop = asyncHandler(async (req, res) => {
-  const {
-    title,
-    objective,
-    scope,
-    procedure,
-    procedureFreq,
-    materials,
-    safety,
-    results,
-  } = req.body;
+  const { title, data } = req.body;
   const protocols = await SOP.find({ user: req.user._id });
   const protocol = await SOP.create({
     user: req.user._id,
 
     title,
-    objective,
-    scope,
-    procedure,
-    materials,
-    procedureFreq,
-    safety,
-    results,
+    data,
     sopId: protocols.length + 1,
   });
   if (protocol) {

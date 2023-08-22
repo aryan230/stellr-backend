@@ -12,6 +12,9 @@ const protocolSchema = mongoose.Schema(
       required: true,
       ref: "User",
     },
+    data: {
+      type: String,
+    },
     title: {
       type: String,
       required: true,

@@ -16,6 +16,9 @@ const sopSchema = mongoose.Schema(
       type: String,
       required: true,
     },
+    data: {
+      type: String,
+    },
     objective: {
       type: String,
     },

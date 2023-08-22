@@ -27,4 +27,12 @@ const getMyTemplates = asyncHandler(async (req, res) => {
   res.json(templates);
 });
 
-export { addNewEntryTemplate, getMyTemplates };
+const deleteTemplate = asyncHandler(async (req, res) => {
+  const id = req.params.id;
+  const template = await EntryTemplate.findById(id);
+  template.deleted = true;
+  const newTemplate = template.save();
+  res.json(newTemplate);
+});
+
+export { addNewEntryTemplate, getMyTemplates, deleteTemplate };
