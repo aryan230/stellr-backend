@@ -36,6 +36,7 @@ const getMySamples = asyncHandler(async (req, res) => {
 });
 
 const updateSampleProfile = asyncHandler(async (req, res) => {
+  console.log(req.body);
   const project = await Sample.findById(req.params.id);
   if (project) {
     project.data = req.body.data || project.data;
