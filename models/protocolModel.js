@@ -19,6 +19,12 @@ const protocolSchema = mongoose.Schema(
       type: String,
       required: true,
     },
+    image: {
+      type: String,
+    },
+    file: {
+      type: String,
+    },
     objective: {
       type: String,
     },
