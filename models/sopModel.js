@@ -16,6 +16,12 @@ const sopSchema = mongoose.Schema(
       type: String,
       required: true,
     },
+    image: {
+      type: String,
+    },
+    file: {
+      type: String,
+    },
     data: {
       type: String,
     },

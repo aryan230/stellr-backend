@@ -51,4 +51,24 @@ const updateSampleProfile = asyncHandler(async (req, res) => {
   }
 });
 
-export { addSample, getMySamples, getAllSamples, updateSampleProfile };
+const addSampleLogs = asyncHandler(async (req, res) => {
+  const { entryId, logDetails } = req.body;
+  const entry = await Sample.findById(entryId);
+  if (entry) {
+    let newLogs = entry.logs;
+    newLogs.push(logDetails);
+    entry.logs = newLogs;
+    const updatedEntry = await entry.save();
+    res.json(updatedEntry);
+  } else {
+    throw new Error(" No task with id");
+  }
+});
+
+export {
+  addSample,
+  getMySamples,
+  getAllSamples,
+  updateSampleProfile,
+  addSampleLogs,
+};
