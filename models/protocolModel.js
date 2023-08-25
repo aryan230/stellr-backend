@@ -46,6 +46,27 @@ const protocolSchema = mongoose.Schema(
     protocolId: {
       type: Number,
     },
+    logs: [
+      {
+        user: {
+          type: mongoose.Schema.Types.ObjectId,
+          required: true,
+          ref: "User",
+        },
+        userName: {
+          type: String,
+        },
+        userEmail: {
+          type: String,
+        },
+        message: {
+          type: String,
+        },
+        date: {
+          type: Number,
+        },
+      },
+    ],
   },
   {
     timestamps: true,

@@ -8,13 +8,16 @@ import {
 } from "../controllers/sampleController.js";
 import {
   addProtocol,
+  addProtocolLogs,
   getAllProtocols,
   getMyProtocols,
+  updateProtocolProfile,
 } from "../controllers/protocolController.js";
 const router = express.Router();
+router.route("/logs").post(addProtocolLogs);
 router.route("/").post(protect, addProtocol).get(protect, getAllProtocols);
 router
   .route("/:id")
   .get(protect, getMyProtocols)
-  .put(protect, updateSampleProfile);
+  .put(protect, updateProtocolProfile);
 export default router;

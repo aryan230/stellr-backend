@@ -37,10 +37,13 @@ const getMyProtocols = asyncHandler(async (req, res) => {
   res.json(sample);
 });
 
-const updateSampleProfile = asyncHandler(async (req, res) => {
-  const project = await Sample.findById(req.params.id);
+const updateProtocolProfile = asyncHandler(async (req, res) => {
+  const project = await Protocol.findById(req.params.id);
   if (project) {
-    project.data = req.body.data || project.data;
+    (project.data = req.body.data || project.data),
+      (project.title = req.body.title || project.title),
+      (project.image = req.body.image || project.image),
+      (project.file = req.body.file || project.file);
     const updatedProject = await project.save();
     res.json({
       _id: updatedProject._id,
@@ -52,4 +55,24 @@ const updateSampleProfile = asyncHandler(async (req, res) => {
   }
 });
 
-export { addProtocol, getMyProtocols, getAllProtocols, updateSampleProfile };
+const addProtocolLogs = asyncHandler(async (req, res) => {
+  const { entryId, logDetails } = req.body;
+  const entry = await Protocol.findById(entryId);
+  if (entry) {
+    let newLogs = entry.logs;
+    newLogs.push(logDetails);
+    entry.logs = newLogs;
+    const updatedEntry = await entry.save();
+    res.json(updatedEntry);
+  } else {
+    throw new Error(" No task with id");
+  }
+});
+
+export {
+  addProtocol,
+  getMyProtocols,
+  getAllProtocols,
+  updateProtocolProfile,
+  addProtocolLogs,
+};

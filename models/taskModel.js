@@ -12,6 +12,9 @@ const taskSchema = mongoose.Schema(
       required: true,
       ref: "User",
     },
+    description: {
+      type: String,
+    },
     subject: {
       type: String,
       required: true,

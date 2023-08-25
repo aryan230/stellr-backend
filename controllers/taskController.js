@@ -1,11 +1,20 @@
 import asyncHandler from "express-async-handler";
 import Task from "../models/taskModel.js";
 const addTask = asyncHandler(async (req, res) => {
-  const { projectId, subject, due_date, priority, status, assigned } = req.body;
+  const {
+    projectId,
+    subject,
+    due_date,
+    priority,
+    status,
+    assigned,
+    description,
+  } = req.body;
   const task = await Task.create({
     project: projectId,
     user: req.user._id,
     subject,
+    description,
     due_date,
     priority,
     status,
@@ -18,6 +27,7 @@ const addTask = asyncHandler(async (req, res) => {
       project: task.project,
       subject: task.name,
       due_date: task.due_date,
+      description: task.description,
       priority: task.priority,
       status: task.status,
       assigned: task.assigned,
