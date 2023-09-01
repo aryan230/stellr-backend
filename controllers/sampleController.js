@@ -39,6 +39,12 @@ const updateSampleProfile = asyncHandler(async (req, res) => {
   console.log(req.body);
   const project = await Sample.findById(req.params.id);
   if (project) {
+    let vc = project.versionControl;
+    vc.push({
+      data: JSON.stringify(project),
+      date: Date.now(),
+    });
+    project.versionControl = vc;
     project.data = req.body.data || project.data;
     const updatedProject = await project.save();
     res.json({

@@ -99,7 +99,7 @@ io.on("connection", (socket) => {
           date: Date.now(),
         },
       });
-      // const entry = await Entry.findById(documentId);
+
       // entry.data = [,];
       // const updatedEntry = await entry.save();
     });

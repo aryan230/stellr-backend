@@ -52,6 +52,20 @@ const addEntryLogs = asyncHandler(async (req, res) => {
   }
 });
 
+const addVersionControl = asyncHandler(async (req, res) => {
+  const { entryId, logDetails } = req.body;
+  const entry = await Entry.findById(entryId);
+  if (entry) {
+    let newLogs = entry.versionControl;
+    newLogs.push(logDetails);
+    entry.versionControl = newLogs;
+    const updatedEntry = await entry.save();
+    res.json(updatedEntry);
+  } else {
+    throw new Error(" No entry with id");
+  }
+});
+
 const updateEntryProfile = asyncHandler(async (req, res) => {
   const project = await Entry.findById(req.params.id);
   if (project) {
@@ -73,4 +87,5 @@ export {
   getMyEntries,
   addEntryLogs,
   updateEntryProfile,
+  addVersionControl,
 };

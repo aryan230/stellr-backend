@@ -24,7 +24,25 @@ const entrySchema = mongoose.Schema(
         },
       },
     ],
-
+    versionControl: [
+      {
+        user: {
+          type: String,
+        },
+        userName: {
+          type: String,
+        },
+        userEmail: {
+          type: String,
+        },
+        date: {
+          type: Number,
+        },
+        oldData: {
+          type: String,
+        },
+      },
+    ],
     logs: [
       {
         user: {

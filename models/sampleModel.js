@@ -36,6 +36,16 @@ const sampleSchema = mongoose.Schema(
         },
       },
     ],
+    versionControl: [
+      {
+        data: {
+          type: String,
+        },
+        date: {
+          type: Number,
+        },
+      },
+    ],
     logs: [
       {
         user: {
