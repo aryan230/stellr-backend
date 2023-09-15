@@ -2,6 +2,7 @@ import express from "express";
 import {
   addUserActiveStatus,
   authUser,
+  checkPasswordUser,
   deleteUser,
   getUserByID,
   getUserMetrics,
@@ -12,6 +13,7 @@ import {
   microsoftAuth,
   registerUser,
   updateUser,
+  updateUserPassword,
   updateUserProfile,
 } from "../controllers/userController.js";
 import { admin, protect } from "../middleware/authMiddleware.js";
@@ -27,7 +29,10 @@ router
   .get(protect, getUserProfile)
   .put(protect, updateUserProfile);
 router.route("/status").post(protect, addUserActiveStatus);
-
+router
+  .route("/password")
+  .post(protect, checkPasswordUser)
+  .put(protect, updateUserPassword);
 router.route("/userMetrics").get(protect, admin, getUserMetrics);
 
 router

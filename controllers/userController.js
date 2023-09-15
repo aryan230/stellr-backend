@@ -170,18 +170,51 @@ const getUserProfile = asyncHandler(async (req, res) => {
   const user = await User.findById(req.user._id);
   if (user) {
     if (user.name) {
-      res.json({
-        _id: user._id,
-        name: user.name,
-        email: user.email,
-        isAdmin: user.isAdmin,
-      });
+      if (user.password) {
+        res.json({
+          _id: user._id,
+          name: user.name,
+          email: user.email,
+          createdAt: user.createdAt,
+          company: user.company,
+          title: user.title,
+          isAdmin: user.isAdmin,
+          password: true,
+        });
+      } else {
+        res.json({
+          _id: user._id,
+          name: user.name,
+          email: user.email,
+          createdAt: user.createdAt,
+          company: user.company,
+          title: user.title,
+          isAdmin: user.isAdmin,
+          password: false,
+        });
+      }
     } else {
-      res.json({
-        _id: user._id,
-        email: user.email,
-        isAdmin: user.isAdmin,
-      });
+      if (user.password) {
+        res.json({
+          _id: user._id,
+          email: user.email,
+          createdAt: user.createdAt,
+          isAdmin: user.isAdmin,
+          company: user.company,
+          title: user.title,
+          password: true,
+        });
+      } else {
+        res.json({
+          _id: user._id,
+          email: user.email,
+          createdAt: user.createdAt,
+          isAdmin: user.isAdmin,
+          company: user.company,
+          title: user.title,
+          password: false,
+        });
+      }
     }
   } else {
     res.status(404);
@@ -193,7 +226,48 @@ const updateUserProfile = asyncHandler(async (req, res) => {
   const user = await User.findById(req.user._id);
   if (user) {
     (user.name = req.body.name || user.name),
-      (user.email = req.body.email || user.email);
+      (user.email = req.body.email || user.email),
+      (user.title = req.body.title || user.title),
+      (user.company = req.body.company || user.company);
+    if (req.body.password) {
+      user.password = req.body.password;
+    }
+    const updatedUser = await user.save();
+    res.json({
+      _id: updatedUser._id,
+      name: updatedUser.name,
+      email: updatedUser.email,
+      isAdmin: updatedUser.isAdmin,
+      token: generateToken(updatedUser._id),
+    });
+  } else {
+    res.status(404);
+    throw new Error("No User Found");
+  }
+});
+
+const checkPasswordUser = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.user._id);
+  const { password } = req.body;
+  if (user) {
+    if (await user.matchPassword(password)) {
+      res.json({
+        password: true,
+      });
+    } else {
+      res.json({
+        password: false,
+      });
+    }
+  } else {
+    res.status(404);
+    throw new Error("No User Found");
+  }
+});
+
+const updateUserPassword = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.user._id);
+  if (user) {
     if (req.body.password) {
       user.password = req.body.password;
     }
@@ -320,4 +394,6 @@ export {
   getUsersByEmail,
   getUserMetrics,
   addUserActiveStatus,
+  checkPasswordUser,
+  updateUserPassword,
 };

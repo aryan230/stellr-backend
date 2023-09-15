@@ -62,7 +62,7 @@ const addVersionControl = asyncHandler(async (req, res) => {
     const updatedEntry = await entry.save();
     res.json(updatedEntry);
   } else {
-    throw new Error(" No entry with id");
+    throw new Error("No entry with id");
   }
 });
 

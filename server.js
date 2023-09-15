@@ -19,6 +19,7 @@ import sgMail from "@sendgrid/mail";
 import couponRoutes from "./routes/couponsRoutes.js";
 import firebaseRoutes from "./routes/firebaseRoutes.js";
 import entryRoutes from "./routes/EntryRoutes.js";
+import reportRoutes from "./routes/reportRoutes.js";
 import sopRoutes from "./routes/sopRoutes.js";
 import protocolRoutes from "./routes/protocolRoutes.js";
 import firebaseConfig from "./config/firebase.js";
@@ -126,6 +127,7 @@ app.use("/api/products", productRoutes);
 app.use("/api/orders", orderRoutes);
 app.use("/api/delivery", deliveryAdressRoutes);
 app.use("/api/coupons", couponRoutes);
+app.use("/api/reports", reportRoutes);
 // app.get("/api/sendEmail", (req, res) => {
 //   const msg = {
 //     to: "gabru2306@gmail.com", // Change to your recipient

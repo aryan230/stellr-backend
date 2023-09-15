@@ -21,6 +21,14 @@ const userSchema = mongoose.Schema(
       default: "local",
       required: true,
     },
+    title: {
+      type: String,
+      default: "",
+    },
+    company: {
+      type: String,
+      default: "",
+    },
     password: {
       type: String,
       required: false,
