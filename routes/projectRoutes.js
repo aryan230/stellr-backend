@@ -7,6 +7,7 @@ import {
   getAllProjects,
   getCollabProjects,
   getMyProjects,
+  getMyProjectstats,
   getOrganizationProjects,
   getProjectsById,
   removeCollabrator,
@@ -28,4 +29,5 @@ router.route("/org").post(protect, addOrganization);
 router.route("/collab/update").post(protect, updateCollabRole);
 router.route("/org/:id").get(protect, getOrganizationProjects);
 router.route("/logs").post(addProjectLogs);
+router.route("/stats").post(getMyProjectstats);
 export default router;

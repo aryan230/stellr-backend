@@ -3,6 +3,8 @@ import Project from "../models/projectModel.js";
 import asyncHandler from "express-async-handler";
 import User from "../models/userModel.js";
 import Organization from "../models/organizationModel.js";
+import Entry from "../models/EntryModel.js";
+import Task from "../models/taskModel.js";
 
 const addNewProject = asyncHandler(async (req, res) => {
   const { name, description } = req.body;
@@ -135,6 +137,37 @@ const getMyProjects = asyncHandler(async (req, res) => {
   res.json(projects);
 });
 
+const getMyProjectstats = asyncHandler(async (req, res) => {
+  const { projectId } = req.body;
+  let stats = [];
+  let asyncFunction = async (id, name) => {
+    const entries = await Entry.find({ project: id });
+    const tasks = await Task.find({ project: id });
+    await stats.push({
+      project: id,
+      name: name,
+      entries: entries.length,
+      tasks: tasks.length,
+    });
+  };
+  const promises = projectId.map((e) => asyncFunction(e._id, e.name));
+  await Promise.all(promises);
+  res.json({
+    stats,
+  });
+  // var bar = new Promise((resolve, reject) => {
+  //   projectId.forEach(async (p, index, projectId) => {
+
+  //     if (index === projectId.length - 1) resolve();
+  //   });
+  // });
+  // bar.then(() => {
+  //   res.json({
+  //     stats,
+  //   });
+  // });
+});
+
 const getCollabProjects = asyncHandler(async (req, res) => {
   const id = req.params.id;
   const projects = await Project.find({
@@ -186,4 +219,5 @@ export {
   addOrganization,
   getOrganizationProjects,
   addProjectLogs,
+  getMyProjectstats,
 };
