@@ -6,6 +6,7 @@ import {
   deleteUser,
   getUserByID,
   getUserMetrics,
+  getUserMetricsIndividual,
   getUserProfile,
   getUsers,
   getUsersByEmail,
@@ -23,16 +24,21 @@ router.post("/email", getUsersByEmail);
 router.post("/google", googleAuth);
 router.post("/microsoft", microsoftAuth);
 router.post("/login", authUser);
+
+router.route("/userMetricsIndvidual").get(protect, getUserMetricsIndividual);
+
 router.route("/").post(registerUser).get(protect, admin, getUsers);
 router
   .route("/profile")
   .get(protect, getUserProfile)
   .put(protect, updateUserProfile);
+
 router.route("/status").post(protect, addUserActiveStatus);
 router
   .route("/password")
   .post(protect, checkPasswordUser)
   .put(protect, updateUserPassword);
+
 router.route("/userMetrics").get(protect, admin, getUserMetrics);
 
 router

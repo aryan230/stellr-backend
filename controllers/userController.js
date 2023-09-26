@@ -7,6 +7,7 @@ import Project from "../models/projectModel.js";
 import Organization from "../models/organizationModel.js";
 import Entry from "../models/EntryModel.js";
 import Sample from "../models/sampleModel.js";
+import SOP from "../models/sopModel.js";
 
 const googleAuth = asyncHandler(async (req, res) => {
   const { email, name, type } = req.body;
@@ -356,6 +357,20 @@ const getUserMetrics = asyncHandler(async (req, res) => {
   });
 });
 
+const getUserMetricsIndividual = asyncHandler(async (req, res) => {
+  const samples = await Sample.find({ user: req.user._id });
+  const projects = await Project.find({ user: req.user._id });
+  const sops = await SOP.find({ user: req.user._id });
+  const protocols = await Protocol.find({ user: req.user._id });
+
+  res.json({
+    samples,
+    projects,
+    sops,
+    protocols,
+  });
+});
+
 const addUserActiveStatus = asyncHandler(async (req, res) => {
   const user = await User.findById(req.user._id);
   if (user) {
@@ -396,4 +411,5 @@ export {
   addUserActiveStatus,
   checkPasswordUser,
   updateUserPassword,
+  getUserMetricsIndividual,
 };
