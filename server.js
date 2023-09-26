@@ -20,6 +20,7 @@ import couponRoutes from "./routes/couponsRoutes.js";
 import firebaseRoutes from "./routes/firebaseRoutes.js";
 import entryRoutes from "./routes/EntryRoutes.js";
 import reportRoutes from "./routes/reportRoutes.js";
+import dashboardRoutes from "./routes/dashboardRoutes.js";
 import sopRoutes from "./routes/sopRoutes.js";
 import protocolRoutes from "./routes/protocolRoutes.js";
 import firebaseConfig from "./config/firebase.js";
@@ -82,11 +83,18 @@ app.use(express.json());
 // app.use(cors(corsOptions));
 
 io.on("connection", (socket) => {
-  socket.on("get-document", async (documentId) => {
-    console.log(documentId);
+  socket.on("get-document", async ({ documentId }) => {
     const document = await findOrCreateDocument(documentId);
+    let users = [];
     socket.join(documentId);
-    socket.emit("load-document", document.data[0].block);
+    socket.emit("load-document", {
+      document: document.data[0].block,
+      user: users,
+    });
+    socket.on("send-user", (user) => {
+      users.push(user);
+      socket.broadcast.to(documentId).emit("receive-user", users);
+    });
     socket.on("send-changes", (delta) => {
       socket.broadcast.to(documentId).emit("receive-changes", delta);
     });
@@ -128,6 +136,7 @@ app.use("/api/orders", orderRoutes);
 app.use("/api/delivery", deliveryAdressRoutes);
 app.use("/api/coupons", couponRoutes);
 app.use("/api/reports", reportRoutes);
+app.use("/api/dashboards", dashboardRoutes);
 // app.get("/api/sendEmail", (req, res) => {
 //   const msg = {
 //     to: "gabru2306@gmail.com", // Change to your recipient

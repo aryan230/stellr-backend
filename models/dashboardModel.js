@@ -36,10 +36,11 @@ const dashboardSchema = mongoose.Schema(
         },
       },
     ],
-    dataSet: {
+    active: {
       type: String,
+      default: "false",
     },
-    type: {
+    dataSet: {
       type: String,
     },
   },
