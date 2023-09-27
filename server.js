@@ -32,6 +32,7 @@ import organizationRoutes from "./routes/organizationRoutes.js";
 import axios from "axios";
 import FormData from "form-data";
 import Mailgun from "mailgun.js";
+
 const stripe = new Stripe(
   "sk_test_51MHPaRSGajuPx50dAJ7Y0JCA3PhfRiaMhWCpRUUKlCtos4sNQwsoU6vUfmmvgu3rZjed8Um8LgJl2JezunYyIvev009DR0aSRg"
 );
@@ -60,6 +61,8 @@ const io = new Server(server, {
 
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 app.use(cors());
+app.use(express.json({ limit: "50mb" }));
+app.use(express.urlencoded({ limit: "50mb" }));
 app.use(express.json());
 // ** MIDDLEWARE **
 // const whitelist = [

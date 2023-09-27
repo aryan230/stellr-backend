@@ -81,6 +81,17 @@ const updateEntryProfile = asyncHandler(async (req, res) => {
   }
 });
 
+const deleteEntry = asyncHandler(async (req, res) => {
+  const order = await Entry.findById(req.params.id);
+  if (order) {
+    await order.remove();
+    res.json({ message: "Entry deleted sucessfully" });
+  } else {
+    res.status(404);
+    throw new Error("Entry not found");
+  }
+});
+
 export {
   getEntriesById,
   addNewEntry,
@@ -88,4 +99,5 @@ export {
   addEntryLogs,
   updateEntryProfile,
   addVersionControl,
+  deleteEntry,
 };
