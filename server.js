@@ -40,10 +40,11 @@ const stripe = new Stripe(
 dotenv.config();
 connectDB();
 const mailgun = new Mailgun(FormData);
-const client = mailgun.client({
+export const client = mailgun.client({
   username: "api",
   key: process.env.MAILGUN_API_KEY,
 });
+
 const app = express();
 const server = http.createServer(app);
 

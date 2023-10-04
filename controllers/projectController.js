@@ -5,6 +5,7 @@ import User from "../models/userModel.js";
 import Organization from "../models/organizationModel.js";
 import Entry from "../models/EntryModel.js";
 import Task from "../models/taskModel.js";
+import { client } from "../server.js";
 
 const addNewProject = asyncHandler(async (req, res) => {
   const { name, description } = req.body;
@@ -44,7 +45,7 @@ const updateProjectProfile = asyncHandler(async (req, res) => {
 });
 
 const addCollabrator = asyncHandler(async (req, res) => {
-  const { projectId, collabDetails } = req.body;
+  const { projectId, collabDetails, userEmail } = req.body;
   const project = await Project.findById(projectId);
   if (project) {
     let collabs = project.collaborators;
@@ -55,6 +56,22 @@ const addCollabrator = asyncHandler(async (req, res) => {
       collabs.push(collabDetails);
       project.collaborators = collabs;
       const updatedProject = await project.save();
+      console.log(collabDetails);
+      // const messageData = {
+      //   from: "no-reply <admin@getstellr.io>",
+      //   to: userEmail,
+      //   subject: `You have been added to the project ${project.name}`,
+      //   text: `You have been added to the project ${project.name} with the following id ref #${project._id}.`,
+      // };
+
+      // client.messages
+      //   .create("getstellr.io", messageData)
+      //   .then((res) => {
+      //     console.log(res);
+      //   })
+      //   .catch((err) => {
+      //     console.error(err);
+      //   });
       res.json(updatedProject);
     }
   } else {

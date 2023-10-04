@@ -69,10 +69,28 @@ const addProtocolLogs = asyncHandler(async (req, res) => {
   }
 });
 
+const updateProtocolStatus = asyncHandler(async (req, res) => {
+  const project = await Protocol.findById(req.params.id);
+  if (project) {
+    project.status = req.body.status || project.status;
+    project.statusBy = req.body.userName;
+    project.statusMessage = req.body.statusMessage;
+    const updatedProject = await project.save();
+    res.json({
+      _id: updatedProject._id,
+      data: updatedProject.data,
+    });
+  } else {
+    res.status(404);
+    throw new Error("No Sample Found");
+  }
+});
+
 export {
   addProtocol,
   getMyProtocols,
   getAllProtocols,
   updateProtocolProfile,
   addProtocolLogs,
+  updateProtocolStatus,
 };

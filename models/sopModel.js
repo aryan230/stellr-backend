@@ -12,6 +12,16 @@ const sopSchema = mongoose.Schema(
       required: true,
       ref: "User",
     },
+    status: {
+      type: String,
+      default: "Draft",
+    },
+    statusBy: {
+      type: String,
+    },
+    statusMessage: {
+      type: String,
+    },
     title: {
       type: String,
       required: true,
@@ -49,6 +59,27 @@ const sopSchema = mongoose.Schema(
     sopId: {
       type: Number,
     },
+    logs: [
+      {
+        user: {
+          type: mongoose.Schema.Types.ObjectId,
+          required: true,
+          ref: "User",
+        },
+        userName: {
+          type: String,
+        },
+        userEmail: {
+          type: String,
+        },
+        message: {
+          type: String,
+        },
+        date: {
+          type: Number,
+        },
+      },
+    ],
   },
   {
     timestamps: true,

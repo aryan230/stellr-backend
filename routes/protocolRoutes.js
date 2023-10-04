@@ -12,6 +12,7 @@ import {
   getAllProtocols,
   getMyProtocols,
   updateProtocolProfile,
+  updateProtocolStatus,
 } from "../controllers/protocolController.js";
 const router = express.Router();
 router.route("/logs").post(addProtocolLogs);
@@ -20,4 +21,6 @@ router
   .route("/:id")
   .get(protect, getMyProtocols)
   .put(protect, updateProtocolProfile);
+
+router.route("/status/:id").put(updateProtocolStatus);
 export default router;

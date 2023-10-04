@@ -37,6 +37,9 @@ const taskSchema = mongoose.Schema(
         userName: {
           type: String,
         },
+        userEmail: {
+          type: String,
+        },
         userType: {
           type: String,
           default: "user",

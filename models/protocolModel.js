@@ -12,6 +12,16 @@ const protocolSchema = mongoose.Schema(
       required: true,
       ref: "User",
     },
+    status: {
+      type: String,
+      default: "Draft",
+    },
+    statusBy: {
+      type: String,
+    },
+    statusMessage: {
+      type: String,
+    },
     data: {
       type: String,
     },

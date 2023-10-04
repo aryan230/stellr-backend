@@ -1,5 +1,8 @@
 import Organization from "../models/organizationModel.js";
 import asyncHandler from "express-async-handler";
+import Protocol from "../models/protocolModel.js";
+import SOP from "../models/sopModel.js";
+import User from "../models/userModel.js";
 
 const addNewOrganization = asyncHandler(async (req, res) => {
   const { name, description } = req.body;
@@ -65,6 +68,40 @@ const joinAnOrg = asyncHandler(async (req, res) => {
   } else {
     throw new Error("User already exists in another organization");
   }
+});
+
+const getMyDataOrganizations = asyncHandler(async (req, res) => {
+  const { orgId } = req.body;
+  const orgDetails = await await Organization.findById(orgId);
+  const ownerDetails = await User.findById(orgDetails.user).select("-password");
+  let orgData = [];
+  let ownerFinalData = [
+    {
+      user: ownerDetails._id,
+      userName: ownerDetails.name,
+    },
+  ];
+
+  let arrayToBeMapped = orgDetails.collaborators;
+  let asyncFunction = async (id, name) => {
+    const protocols = await Protocol.find({ user: id });
+    const sops = await SOP.find({ user: id });
+    await orgData.push({
+      user: id,
+      name: name,
+      protocols,
+      sops,
+    });
+  };
+
+  console.log(arrayToBeMapped);
+  const promises = arrayToBeMapped
+    .concat(ownerFinalData)
+    .map((e) => asyncFunction(e.user, e.userName));
+  await Promise.all(promises);
+  res.json({
+    orgData,
+  });
 });
 
 const addCollabratorOrg = asyncHandler(async (req, res) => {
@@ -144,4 +181,5 @@ export {
   addCollabratorOrg,
   updateCollabRoleOrg,
   joinAnOrg,
+  getMyDataOrganizations,
 };

@@ -6,8 +6,17 @@ import {
   getMySamples,
   updateSampleProfile,
 } from "../controllers/sampleController.js";
-import { addSop, getAllSops, getMySops } from "../controllers/sopController.js";
+import {
+  addSOPLogs,
+  addSop,
+  getAllSops,
+  getMySops,
+  updateSopStatus,
+} from "../controllers/sopController.js";
 const router = express.Router();
 router.route("/").post(protect, addSop).get(protect, getAllSops);
+router.route("/logs").post(addSOPLogs);
 router.route("/:id").get(protect, getMySops).put(protect, updateSampleProfile);
+router.route("/status/:id").put(updateSopStatus);
+
 export default router;

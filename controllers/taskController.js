@@ -1,5 +1,7 @@
 import asyncHandler from "express-async-handler";
 import Task from "../models/taskModel.js";
+import User from "../models/userModel.js";
+import { client } from "../server.js";
 const addTask = asyncHandler(async (req, res) => {
   const {
     projectId,
@@ -20,6 +22,26 @@ const addTask = asyncHandler(async (req, res) => {
     status,
     assigned,
   });
+  // if (assigned.length > 0) {
+  //   assigned.forEach(async (u) => {
+  //     const user = await User.findById(u.user);
+  //     const messageData = {
+  //       from: "no-reply <admin@getstellr.io>",
+  //       to: user.email,
+  //       subject: `You have been assigned a new Task`,
+  //       text: `You have been assigned a new Task with subject ${subject}`,
+  //     };
+
+  //     client.messages
+  //       .create("getstellr.io", messageData)
+  //       .then((res) => {
+  //         console.log(res);
+  //       })
+  //       .catch((err) => {
+  //         console.error(err);
+  //       });
+  //   });
+  // }
   if (task) {
     res.status(201);
     res.json({

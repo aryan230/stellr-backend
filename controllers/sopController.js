@@ -39,7 +39,7 @@ const getMySops = asyncHandler(async (req, res) => {
 });
 
 const updateSampleProfile = asyncHandler(async (req, res) => {
-  const project = await Sample.findById(req.params.id);
+  const project = await SOP.findById(req.params.id);
   if (project) {
     project.data = req.body.data || project.data;
     const updatedProject = await project.save();
@@ -53,4 +53,42 @@ const updateSampleProfile = asyncHandler(async (req, res) => {
   }
 });
 
-export { addSop, getMySops, getAllSops, updateSampleProfile };
+const addSOPLogs = asyncHandler(async (req, res) => {
+  const { entryId, logDetails } = req.body;
+  const entry = await SOP.findById(entryId);
+  if (entry) {
+    let newLogs = entry.logs;
+    newLogs.push(logDetails);
+    entry.logs = newLogs;
+    const updatedEntry = await entry.save();
+    res.json(updatedEntry);
+  } else {
+    throw new Error(" No task with id");
+  }
+});
+
+const updateSopStatus = asyncHandler(async (req, res) => {
+  const project = await SOP.findById(req.params.id);
+  if (project) {
+    project.status = req.body.status || project.status;
+    project.statusBy = req.body.userName;
+    project.statusMessage = req.body.statusMessage;
+    const updatedProject = await project.save();
+    res.json({
+      _id: updatedProject._id,
+      data: updatedProject.data,
+    });
+  } else {
+    res.status(404);
+    throw new Error("No Sample Found");
+  }
+});
+
+export {
+  addSop,
+  getMySops,
+  getAllSops,
+  updateSampleProfile,
+  addSOPLogs,
+  updateSopStatus,
+};

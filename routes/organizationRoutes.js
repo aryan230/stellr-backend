@@ -15,6 +15,7 @@ import {
   addCollabratorOrg,
   addNewOrganization,
   getCollabOrganizations,
+  getMyDataOrganizations,
   getMyOrganizations,
   joinAnOrg,
   removeCollabratorOrg,
@@ -32,4 +33,5 @@ router
 router.route("/collab/:id").get(protect, getCollabOrganizations);
 router.route("/join").post(protect, joinAnOrg);
 router.route("/collab/update").post(protect, updateCollabRoleOrg);
+router.route("/orgData").post(getMyDataOrganizations);
 export default router;
