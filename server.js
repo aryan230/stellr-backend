@@ -49,6 +49,7 @@ const app = express();
 const server = http.createServer(app);
 
 const io = new Server(server, {
+  maxHttpBufferSize: 1e8,
   cors: {
     origin: [
       "http://localhost:3000",
@@ -100,11 +101,11 @@ io.on("connection", (socket) => {
       socket.broadcast.to(documentId).emit("receive-user", users);
     });
     socket.on("send-changes", (delta) => {
+      console.log(delta.ops);
       socket.broadcast.to(documentId).emit("receive-changes", delta);
     });
 
     socket.on("save-document", async (data) => {
-      console.log(data.data.ops);
       await Entry.findByIdAndUpdate(documentId, {
         data: {
           user: data.user,

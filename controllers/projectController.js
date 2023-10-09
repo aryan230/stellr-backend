@@ -6,6 +6,7 @@ import Organization from "../models/organizationModel.js";
 import Entry from "../models/EntryModel.js";
 import Task from "../models/taskModel.js";
 import { client } from "../server.js";
+import TemplateOne from "../templates/one.js";
 
 const addNewProject = asyncHandler(async (req, res) => {
   const { name, description } = req.body;
@@ -57,21 +58,28 @@ const addCollabrator = asyncHandler(async (req, res) => {
       project.collaborators = collabs;
       const updatedProject = await project.save();
       console.log(collabDetails);
-      // const messageData = {
-      //   from: "no-reply <admin@getstellr.io>",
-      //   to: userEmail,
-      //   subject: `You have been added to the project ${project.name}`,
-      //   text: `You have been added to the project ${project.name} with the following id ref #${project._id}.`,
-      // };
+      const messageData = {
+        from: "no-reply <admin@getstellr.io>",
+        to: userEmail,
+        subject: `You have been added to a new project `,
+        html: `${TemplateOne(
+          `You have been added to a new Project ${project.name}`,
+          collabDetails.userName,
+          `Congratulations! You have been added to a new project. As you dive into this project, your unique contributions will be greatly valued.`,
+          `View Dashboard`,
+          `https://app.getstellr.io/`,
+          `© Stellr Tech Solutions Private Limited`
+        )}`,
+      };
 
-      // client.messages
-      //   .create("getstellr.io", messageData)
-      //   .then((res) => {
-      //     console.log(res);
-      //   })
-      //   .catch((err) => {
-      //     console.error(err);
-      //   });
+      client.messages
+        .create("getstellr.io", messageData)
+        .then((res) => {
+          console.log(res);
+        })
+        .catch((err) => {
+          console.error(err);
+        });
       res.json(updatedProject);
     }
   } else {
