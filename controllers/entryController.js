@@ -2,7 +2,7 @@ import Entry from "../models/EntryModel.js";
 import asyncHandler from "express-async-handler";
 
 const addNewEntry = asyncHandler(async (req, res) => {
-  const { name, data, projectId } = req.body;
+  const { name, data, projectId, type } = req.body;
 
   if (!name) {
     res.status(400);
@@ -13,6 +13,7 @@ const addNewEntry = asyncHandler(async (req, res) => {
       project: projectId,
       data,
       name,
+      type: type ? type : "Lab Notebook",
     });
 
     const createEntry = await entry.save();
@@ -81,6 +82,22 @@ const updateEntryProfile = asyncHandler(async (req, res) => {
   }
 });
 
+const converUpdateEntry = asyncHandler(async (req, res) => {
+  const project = await Entry.findById(req.params.id);
+  if (project) {
+    project.data = req.body.data || project.data;
+    project.converted = true;
+    const updatedProject = await project.save();
+    res.json({
+      _id: updatedProject._id,
+      data: updatedProject.data,
+    });
+  } else {
+    res.status(404);
+    throw new Error("No Entry Found");
+  }
+});
+
 const deleteEntry = asyncHandler(async (req, res) => {
   const order = await Entry.findById(req.params.id);
   if (order) {
@@ -100,4 +117,5 @@ export {
   updateEntryProfile,
   addVersionControl,
   deleteEntry,
+  converUpdateEntry,
 };
