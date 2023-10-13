@@ -25,6 +25,8 @@ import sopRoutes from "./routes/sopRoutes.js";
 import protocolRoutes from "./routes/protocolRoutes.js";
 import firebaseConfig from "./config/firebase.js";
 import entryTemplateRoutes from "./routes/entryTemplateRoutes.js";
+import fieldRoutes from "./routes/fieldRoutes.js";
+import sampleTemplateRoutes from "./routes/sampleTemplateRoutes.js";
 import { Server } from "socket.io";
 import http from "http";
 import Entry from "./models/EntryModel.js";
@@ -132,6 +134,8 @@ app.use("/api/projects", projectRoutes);
 app.use("/api/organs", organizationRoutes);
 app.use("/api/entries", entryRoutes);
 app.use("/api/entry/templates", entryTemplateRoutes);
+app.use("/api/fields", fieldRoutes);
+app.use("/api/sampleTemplates", sampleTemplateRoutes);
 app.use("/api/tasks", taskRoutes);
 app.use("/api/samples", sampleRoutes);
 app.use("/api/protocols", protocolRoutes);
@@ -190,8 +194,6 @@ app.get("/api/config/openai", (req, res) => {
     apikey: process.env.OPEN_API_KEY,
   });
 });
-
-console.log("Hello word");
 
 app.post("/api/create-payment-intent", async (req, res) => {
   const { amount } = req.body;
