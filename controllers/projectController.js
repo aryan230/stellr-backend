@@ -61,7 +61,7 @@ const addCollabrator = asyncHandler(async (req, res) => {
       const messageData = {
         from: "no-reply <admin@getstellr.io>",
         to: userEmail,
-        subject: `You have been added to a new project `,
+        subject: `Welcome to Project ${project.name} on Stellr!`,
         html: `${TemplateOne(
           `You have been added to a new Project ${project.name}`,
           collabDetails.userName,

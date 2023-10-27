@@ -34,7 +34,7 @@ import organizationRoutes from "./routes/organizationRoutes.js";
 import axios from "axios";
 import FormData from "form-data";
 import Mailgun from "mailgun.js";
-
+import chemicalDrawingRoutes from "./routes/chemicalDrawingRoutes.js";
 const stripe = new Stripe(
   "sk_test_51MHPaRSGajuPx50dAJ7Y0JCA3PhfRiaMhWCpRUUKlCtos4sNQwsoU6vUfmmvgu3rZjed8Um8LgJl2JezunYyIvev009DR0aSRg"
 );
@@ -92,16 +92,26 @@ app.use(express.json());
 io.on("connection", (socket) => {
   socket.on("get-document", async ({ documentId }) => {
     const document = await findOrCreateDocument(documentId);
-    let users = [];
+
     socket.join(documentId);
+
+    socket.on("joinLobby", (user) => {
+      console.log(user);
+      socket.user = user;
+      // Store user's name in a data structure or database
+      // Broadcast to other clients in the lobby
+      socket.broadcast.to(documentId).emit("userJoined", user);
+    });
+
+    socket.on("disconnect", () => {
+      const user = socket.user;
+      socket.broadcast.to(documentId).emit("userLeft", user);
+    });
+
     socket.emit("load-document", {
       document: document.data[0].block,
-      user: users,
     });
-    socket.on("send-user", (user) => {
-      users.push(user);
-      socket.broadcast.to(documentId).emit("receive-user", users);
-    });
+
     socket.on("send-changes", (delta) => {
       console.log(delta.ops);
       socket.broadcast.to(documentId).emit("receive-changes", delta);
@@ -146,6 +156,7 @@ app.use("/api/delivery", deliveryAdressRoutes);
 app.use("/api/coupons", couponRoutes);
 app.use("/api/reports", reportRoutes);
 app.use("/api/dashboards", dashboardRoutes);
+app.use("/api/cd", chemicalDrawingRoutes);
 // app.get("/api/sendEmail", (req, res) => {
 //   const msg = {
 //     to: "gabru2306@gmail.com", // Change to your recipient
