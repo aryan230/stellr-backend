@@ -35,6 +35,7 @@ import axios from "axios";
 import FormData from "form-data";
 import Mailgun from "mailgun.js";
 import chemicalDrawingRoutes from "./routes/chemicalDrawingRoutes.js";
+import orgRolesRoutes from "./routes/orgRolesRoutes.js";
 const stripe = new Stripe(
   "sk_test_51MHPaRSGajuPx50dAJ7Y0JCA3PhfRiaMhWCpRUUKlCtos4sNQwsoU6vUfmmvgu3rZjed8Um8LgJl2JezunYyIvev009DR0aSRg"
 );
@@ -157,6 +158,7 @@ app.use("/api/coupons", couponRoutes);
 app.use("/api/reports", reportRoutes);
 app.use("/api/dashboards", dashboardRoutes);
 app.use("/api/cd", chemicalDrawingRoutes);
+app.use("/api/orgRole", orgRolesRoutes);
 // app.get("/api/sendEmail", (req, res) => {
 //   const msg = {
 //     to: "gabru2306@gmail.com", // Change to your recipient

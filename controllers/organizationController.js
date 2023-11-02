@@ -159,12 +159,13 @@ const removeCollabratorOrg = asyncHandler(async (req, res) => {
 });
 
 const updateCollabRoleOrg = asyncHandler(async (req, res) => {
-  const { role, projectId, id } = req.body;
+  const { role, projectId, id, permissions } = req.body;
   const project = await Organization.findById(projectId);
   if (project) {
     let collabs = project.collaborators;
     const objIndex = collabs.findIndex((el) => el.user == id);
     collabs[objIndex].userType = role;
+    collabs[objIndex].permissions = permissions;
     const updatedProject = await project.save();
     res.json(updatedProject);
   } else {
