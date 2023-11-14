@@ -32,6 +32,9 @@ const sopSchema = mongoose.Schema(
     file: {
       type: String,
     },
+    share: {
+      type: String,
+    },
     data: {
       type: String,
     },

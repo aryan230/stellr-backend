@@ -36,6 +36,8 @@ import FormData from "form-data";
 import Mailgun from "mailgun.js";
 import chemicalDrawingRoutes from "./routes/chemicalDrawingRoutes.js";
 import orgRolesRoutes from "./routes/orgRolesRoutes.js";
+import notificationRoutes from "./routes/notificationRoutes.js";
+import Notification from "./models/notificationModel.js";
 const stripe = new Stripe(
   "sk_test_51MHPaRSGajuPx50dAJ7Y0JCA3PhfRiaMhWCpRUUKlCtos4sNQwsoU6vUfmmvgu3rZjed8Um8LgJl2JezunYyIvev009DR0aSRg"
 );
@@ -91,6 +93,19 @@ app.use(express.json());
 // app.use(cors(corsOptions));
 
 io.on("connection", (socket) => {
+  
+  // Notifications Start
+
+  socket.on("join-room", (room) => {
+    socket.join(room);
+  });
+
+  socket.on("send-message", (message) => {
+    socket.to(message.id).emit("receive-message", message);
+  });
+
+  // Notifications End
+
   socket.on("get-document", async ({ documentId }) => {
     const document = await findOrCreateDocument(documentId);
 
@@ -159,6 +174,7 @@ app.use("/api/reports", reportRoutes);
 app.use("/api/dashboards", dashboardRoutes);
 app.use("/api/cd", chemicalDrawingRoutes);
 app.use("/api/orgRole", orgRolesRoutes);
+app.use("/api/notification", notificationRoutes);
 // app.get("/api/sendEmail", (req, res) => {
 //   const msg = {
 //     to: "gabru2306@gmail.com", // Change to your recipient

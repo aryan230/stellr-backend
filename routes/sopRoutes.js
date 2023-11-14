@@ -11,12 +11,15 @@ import {
   addSop,
   getAllSops,
   getMySops,
+  getSopById,
+  updateSopProfile,
   updateSopStatus,
 } from "../controllers/sopController.js";
 const router = express.Router();
 router.route("/").post(protect, addSop).get(protect, getAllSops);
 router.route("/logs").post(addSOPLogs);
-router.route("/:id").get(protect, getMySops).put(protect, updateSampleProfile);
+router.route("/:id").get(protect, getMySops).put(protect, updateSopProfile);
+router.route("/p/:id").get(protect, getSopById);
 router.route("/status/:id").put(updateSopStatus);
 
 export default router;

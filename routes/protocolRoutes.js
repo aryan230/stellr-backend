@@ -11,6 +11,7 @@ import {
   addProtocolLogs,
   getAllProtocols,
   getMyProtocols,
+  getProtocolById,
   updateProtocolProfile,
   updateProtocolStatus,
 } from "../controllers/protocolController.js";
@@ -21,6 +22,8 @@ router
   .route("/:id")
   .get(protect, getMyProtocols)
   .put(protect, updateProtocolProfile);
+
+router.route("/p/:id").get(protect, getProtocolById);
 
 router.route("/status/:id").put(updateProtocolStatus);
 export default router;

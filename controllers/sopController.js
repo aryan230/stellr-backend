@@ -38,14 +38,15 @@ const getMySops = asyncHandler(async (req, res) => {
   res.json(sample);
 });
 
-const updateSampleProfile = asyncHandler(async (req, res) => {
+const updateSopProfile = asyncHandler(async (req, res) => {
   const project = await SOP.findById(req.params.id);
   if (project) {
-    project.data = req.body.data || project.data;
+    project.share = req.body.share || project.share;
     const updatedProject = await project.save();
     res.json({
       _id: updatedProject._id,
       data: updatedProject.data,
+      share: updatedProject.share,
     });
   } else {
     res.status(404);
@@ -84,11 +85,17 @@ const updateSopStatus = asyncHandler(async (req, res) => {
   }
 });
 
+const getSopById = asyncHandler(async (req, res) => {
+  const sample = await SOP.findById(req.params.id);
+  res.json(sample);
+});
+
 export {
   addSop,
   getMySops,
   getAllSops,
-  updateSampleProfile,
+  updateSopProfile,
   addSOPLogs,
   updateSopStatus,
+  getSopById,
 };

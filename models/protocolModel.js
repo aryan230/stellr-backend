@@ -19,6 +19,9 @@ const protocolSchema = mongoose.Schema(
     statusBy: {
       type: String,
     },
+    share: {
+      type: String,
+    },
     statusMessage: {
       type: String,
     },

@@ -31,6 +31,11 @@ const getAllProtocols = asyncHandler(async (req, res) => {
   res.json(sample);
 });
 
+const getProtocolById = asyncHandler(async (req, res) => {
+  const sample = await Protocol.findById(req.params.id);
+  res.json(sample);
+});
+
 const getMyProtocols = asyncHandler(async (req, res) => {
   const projectId = req.params.id;
   const sample = await Protocol.find({ user: req.user._id });
@@ -43,11 +48,13 @@ const updateProtocolProfile = asyncHandler(async (req, res) => {
     (project.data = req.body.data || project.data),
       (project.title = req.body.title || project.title),
       (project.image = req.body.image || project.image),
-      (project.file = req.body.file || project.file);
+      (project.file = req.body.file || project.file),
+      (project.share = req.body.share || project.share);
     const updatedProject = await project.save();
     res.json({
       _id: updatedProject._id,
       data: updatedProject.data,
+      share: updatedProject.share,
     });
   } else {
     res.status(404);
@@ -93,4 +100,5 @@ export {
   updateProtocolProfile,
   addProtocolLogs,
   updateProtocolStatus,
+  getProtocolById,
 };
