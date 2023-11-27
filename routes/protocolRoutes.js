@@ -9,6 +9,7 @@ import {
 import {
   addProtocol,
   addProtocolLogs,
+  deleteProtocol,
   getAllProtocols,
   getMyProtocols,
   getProtocolById,
@@ -23,7 +24,9 @@ router
   .get(protect, getMyProtocols)
   .put(protect, updateProtocolProfile);
 
-router.route("/p/:id").get(protect, getProtocolById);
-
+router
+  .route("/p/:id")
+  .get(protect, getProtocolById)
+  .delete(protect, deleteProtocol);
 router.route("/status/:id").put(updateProtocolStatus);
 export default router;

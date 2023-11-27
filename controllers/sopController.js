@@ -90,6 +90,14 @@ const getSopById = asyncHandler(async (req, res) => {
   res.json(sample);
 });
 
+const deleteSOP = asyncHandler(async (req, res) => {
+  const id = req.params.id;
+  const template = await SOP.findById(id);
+  template.deleted = true;
+  const newTemplate = template.save();
+  res.json(newTemplate);
+});
+
 export {
   addSop,
   getMySops,
@@ -98,4 +106,5 @@ export {
   addSOPLogs,
   updateSopStatus,
   getSopById,
+  deleteSOP,
 };

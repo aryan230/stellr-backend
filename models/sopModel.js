@@ -47,6 +47,10 @@ const sopSchema = mongoose.Schema(
     procedureFreq: {
       type: String,
     },
+    deleted: {
+      type: Boolean,
+      default: false,
+    },
     procedure: {
       type: String,
     },

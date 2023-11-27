@@ -128,6 +128,14 @@ const addTaskLogs = asyncHandler(async (req, res) => {
   }
 });
 
+const deleteTask = asyncHandler(async (req, res) => {
+  const id = req.params.id;
+  const template = await Task.findById(id);
+  template.deleted = true;
+  const newTemplate = template.save();
+  res.json(newTemplate);
+});
+
 export {
   addTask,
   getMyTasks,
@@ -136,4 +144,5 @@ export {
   getCollabTasks,
   updateTask,
   addTaskLogs,
+  deleteTask,
 };

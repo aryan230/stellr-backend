@@ -33,6 +33,10 @@ const entrySchema = mongoose.Schema(
     statusMessage: {
       type: String,
     },
+    deleted: {
+      type: Boolean,
+      default: false,
+    },
     newData: [
       {
         user: {

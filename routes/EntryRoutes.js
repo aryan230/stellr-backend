@@ -16,7 +16,7 @@ router
   .get(getMyEntries)
   .put(protect, updateEntryProfile)
   .delete(protect, deleteEntry);
-
+router.route("/p/:id").delete(protect, deleteEntry);
 router.route("/convert/:id").put(protect, converUpdateEntry);
 router.route("/").post(protect, addNewEntry);
 router.route("/vc").post(addVersionControl);

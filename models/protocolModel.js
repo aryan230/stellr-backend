@@ -59,6 +59,10 @@ const protocolSchema = mongoose.Schema(
     protocolId: {
       type: Number,
     },
+    deleted: {
+      type: Boolean,
+      default: false,
+    },
     logs: [
       {
         user: {

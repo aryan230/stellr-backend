@@ -93,6 +93,14 @@ const updateProtocolStatus = asyncHandler(async (req, res) => {
   }
 });
 
+const deleteProtocol = asyncHandler(async (req, res) => {
+  const id = req.params.id;
+  const template = await Protocol.findById(id);
+  template.deleted = true;
+  const newTemplate = template.save();
+  res.json(newTemplate);
+});
+
 export {
   addProtocol,
   getMyProtocols,
@@ -101,4 +109,5 @@ export {
   addProtocolLogs,
   updateProtocolStatus,
   getProtocolById,
+  deleteProtocol,
 };

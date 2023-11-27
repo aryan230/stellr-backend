@@ -29,6 +29,10 @@ const taskSchema = mongoose.Schema(
     status: {
       type: String,
     },
+    deleted: {
+      type: Boolean,
+      default: false,
+    },
     assigned: [
       {
         user: {
