@@ -4,6 +4,7 @@ import {
   addNewProject,
   addOrganization,
   addProjectLogs,
+  deleteProject,
   getAllProjects,
   getCollabProjects,
   getMyProjects,
@@ -11,6 +12,7 @@ import {
   getOrganizationProjects,
   getProjectsById,
   removeCollabrator,
+  restoreProject,
   updateCollabRole,
   updateProjectProfile,
 } from "../controllers/projectController.js";
@@ -24,6 +26,8 @@ router
   .route("/collab")
   .post(protect, addCollabrator)
   .delete(protect, removeCollabrator);
+router.route("/p/:id").delete(protect, deleteProject);
+router.route("/r/:id").delete(protect, restoreProject);
 router.route("/collab/:id").get(protect, getCollabProjects);
 router.route("/org").post(protect, addOrganization);
 router.route("/collab/update").post(protect, updateCollabRole);

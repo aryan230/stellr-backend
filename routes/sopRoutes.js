@@ -13,6 +13,7 @@ import {
   getAllSops,
   getMySops,
   getSopById,
+  restoreSOP,
   updateSopProfile,
   updateSopStatus,
 } from "../controllers/sopController.js";
@@ -21,6 +22,7 @@ router.route("/").post(protect, addSop).get(protect, getAllSops);
 router.route("/logs").post(addSOPLogs);
 router.route("/:id").get(protect, getMySops).put(protect, updateSopProfile);
 router.route("/p/:id").get(protect, getSopById).delete(protect, deleteSOP);
+router.route("/r/:id").delete(protect, restoreSOP);
 router.route("/status/:id").put(updateSopStatus);
 
 export default router;

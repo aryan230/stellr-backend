@@ -101,6 +101,14 @@ const deleteProtocol = asyncHandler(async (req, res) => {
   res.json(newTemplate);
 });
 
+const restoreProtocol = asyncHandler(async (req, res) => {
+  const id = req.params.id;
+  const template = await Protocol.findById(id);
+  template.deleted = false;
+  const newTemplate = template.save();
+  res.json(newTemplate);
+});
+
 export {
   addProtocol,
   getMyProtocols,
@@ -110,4 +118,5 @@ export {
   updateProtocolStatus,
   getProtocolById,
   deleteProtocol,
+  restoreProtocol,
 };

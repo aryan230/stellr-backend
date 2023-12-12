@@ -13,6 +13,7 @@ import {
   getAllProtocols,
   getMyProtocols,
   getProtocolById,
+  restoreProtocol,
   updateProtocolProfile,
   updateProtocolStatus,
 } from "../controllers/protocolController.js";
@@ -28,5 +29,7 @@ router
   .route("/p/:id")
   .get(protect, getProtocolById)
   .delete(protect, deleteProtocol);
+
+router.route("/r/:id").delete(protect, restoreProtocol);
 router.route("/status/:id").put(updateProtocolStatus);
 export default router;

@@ -70,15 +70,35 @@ const addVersionControl = asyncHandler(async (req, res) => {
 const updateEntryProfile = asyncHandler(async (req, res) => {
   const project = await Entry.findById(req.params.id);
   if (project) {
-    project.name = req.body.name || project.name;
+    (project.name = req.body.name || project.name),
+      (project.submittedForApproval =
+        req.body.submittedForApproval || project.submittedForApproval);
     const updatedProject = await project.save();
     res.json({
       _id: updatedProject._id,
       name: updatedProject.name,
+      submittedForApproval: updatedProject.submittedForApproval,
     });
   } else {
     res.status(404);
     throw new Error("No Entry Found");
+  }
+});
+
+const updateEntryStatus = asyncHandler(async (req, res) => {
+  const project = await Entry.findById(req.params.id);
+  if (project) {
+    project.status = req.body.status || project.status;
+    project.statusBy = req.body.userName;
+    project.statusMessage = req.body.statusMessage;
+    const updatedProject = await project.save();
+    res.json({
+      _id: updatedProject._id,
+      data: updatedProject.data,
+    });
+  } else {
+    res.status(404);
+    throw new Error("No Sample Found");
   }
 });
 
@@ -115,4 +135,5 @@ export {
   addVersionControl,
   deleteEntry,
   converUpdateEntry,
+  updateEntryStatus,
 };

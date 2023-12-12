@@ -231,6 +231,22 @@ const addProjectLogs = asyncHandler(async (req, res) => {
   }
 });
 
+const deleteProject = asyncHandler(async (req, res) => {
+  const id = req.params.id;
+  const template = await Project.findById(id);
+  template.deleted = true;
+  const newTemplate = template.save();
+  res.json(newTemplate);
+});
+
+const restoreProject = asyncHandler(async (req, res) => {
+  const id = req.params.id;
+  const template = await Project.findById(id);
+  template.deleted = false;
+  const newTemplate = template.save();
+  res.json(newTemplate);
+});
+
 export {
   getProjectsById,
   addNewProject,
@@ -245,4 +261,6 @@ export {
   getOrganizationProjects,
   addProjectLogs,
   getMyProjectstats,
+  deleteProject,
+  restoreProject,
 };

@@ -15,6 +15,15 @@ const projectSchema = mongoose.Schema(
       type: String,
       required: true,
     },
+    deleted: {
+      type: Boolean,
+      default: false,
+    },
+    color: {
+      type: String,
+      required: true,
+      default: "#4338ca",
+    },
     logs: [
       {
         user: {

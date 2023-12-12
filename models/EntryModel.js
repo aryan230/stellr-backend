@@ -23,6 +23,10 @@ const entrySchema = mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    submittedForApproval: {
+      type: Boolean,
+      default: false,
+    },
     status: {
       type: String,
       default: "Draft",

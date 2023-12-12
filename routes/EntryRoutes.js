@@ -9,6 +9,7 @@ import {
   getEntriesById,
   getMyEntries,
   updateEntryProfile,
+  updateEntryStatus,
 } from "../controllers/entryController.js";
 const router = express.Router();
 router
@@ -18,6 +19,7 @@ router
   .delete(protect, deleteEntry);
 router.route("/p/:id").delete(protect, deleteEntry);
 router.route("/convert/:id").put(protect, converUpdateEntry);
+router.route("/status/:id").put(updateEntryStatus);
 router.route("/").post(protect, addNewEntry);
 router.route("/vc").post(addVersionControl);
 router.route("/logs").post(addEntryLogs);
