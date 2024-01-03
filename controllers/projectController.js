@@ -180,17 +180,26 @@ const getMyProjectstats = asyncHandler(async (req, res) => {
   res.json({
     stats,
   });
-  // var bar = new Promise((resolve, reject) => {
-  //   projectId.forEach(async (p, index, projectId) => {
+});
 
-  //     if (index === projectId.length - 1) resolve();
-  //   });
-  // });
-  // bar.then(() => {
-  //   res.json({
-  //     stats,
-  //   });
-  // });
+const getMyProjectEntries = asyncHandler(async (req, res) => {
+  const { projectId } = req.body;
+  let stats = [];
+  let asyncFunction = async (id, name) => {
+    const entries = await Entry.find({ project: id });
+    const tasks = await Task.find({ project: id });
+    await stats.push({
+      project: id,
+      name: name,
+      entries: entries,
+      tasks: tasks.length,
+    });
+  };
+  const promises = projectId.map((e) => asyncFunction(e._id, e.name));
+  await Promise.all(promises);
+  res.json({
+    stats,
+  });
 });
 
 const getCollabProjects = asyncHandler(async (req, res) => {
@@ -261,6 +270,7 @@ export {
   getOrganizationProjects,
   addProjectLogs,
   getMyProjectstats,
+  getMyProjectEntries,
   deleteProject,
   restoreProject,
 };
