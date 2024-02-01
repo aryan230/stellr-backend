@@ -181,6 +181,7 @@ const getUserProfile = asyncHandler(async (req, res) => {
           title: user.title,
           isAdmin: user.isAdmin,
           password: true,
+          home: user.home,
         });
       } else {
         res.json({
@@ -191,6 +192,7 @@ const getUserProfile = asyncHandler(async (req, res) => {
           company: user.company,
           title: user.title,
           isAdmin: user.isAdmin,
+          home: user.home,
           password: false,
         });
       }
@@ -203,6 +205,7 @@ const getUserProfile = asyncHandler(async (req, res) => {
           isAdmin: user.isAdmin,
           company: user.company,
           title: user.title,
+          home: user.home,
           password: true,
         });
       } else {
@@ -213,6 +216,7 @@ const getUserProfile = asyncHandler(async (req, res) => {
           isAdmin: user.isAdmin,
           company: user.company,
           title: user.title,
+          home: user.home,
           password: false,
         });
       }
@@ -229,7 +233,8 @@ const updateUserProfile = asyncHandler(async (req, res) => {
     (user.name = req.body.name || user.name),
       (user.email = req.body.email || user.email),
       (user.title = req.body.title || user.title),
-      (user.company = req.body.company || user.company);
+      (user.company = req.body.company || user.company),
+      (user.home = req.body.home || user.home);
     if (req.body.password) {
       user.password = req.body.password;
     }
@@ -239,6 +244,7 @@ const updateUserProfile = asyncHandler(async (req, res) => {
       name: updatedUser.name,
       email: updatedUser.email,
       isAdmin: updatedUser.isAdmin,
+      home: updatedUser.home,
       token: generateToken(updatedUser._id),
     });
   } else {

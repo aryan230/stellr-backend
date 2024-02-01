@@ -21,6 +21,10 @@ const userSchema = mongoose.Schema(
       default: "local",
       required: true,
     },
+    home: {
+      type: String,
+      default: "",
+    },
     title: {
       type: String,
       default: "",
