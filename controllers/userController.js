@@ -8,6 +8,9 @@ import Organization from "../models/organizationModel.js";
 import Entry from "../models/EntryModel.js";
 import Sample from "../models/sampleModel.js";
 import SOP from "../models/sopModel.js";
+import { client } from "../server.js";
+import TemplateOne from "../templates/one.js";
+import TemplateTwo from "../templates/two.js";
 
 const googleAuth = asyncHandler(async (req, res) => {
   const { email, name, type } = req.body;
@@ -20,6 +23,7 @@ const googleAuth = asyncHandler(async (req, res) => {
       email: user.email,
       isAdmin: user.isAdmin,
       token: generateToken(user._id),
+      deactivated: user.deactivated,
     });
   } else {
     const user = await User.create({
@@ -35,6 +39,7 @@ const googleAuth = asyncHandler(async (req, res) => {
         email: user.email,
         isAdmin: user.isAdmin,
         token: generateToken(user._id),
+        deactivated: user.deactivated,
       });
     } else {
       res.status(400);
@@ -54,6 +59,7 @@ const microsoftAuth = asyncHandler(async (req, res) => {
       email: user.email,
       isAdmin: user.isAdmin,
       token: generateToken(user._id),
+      deactivated: user.deactivated,
     });
   } else {
     const user = await User.create({
@@ -69,6 +75,7 @@ const microsoftAuth = asyncHandler(async (req, res) => {
         email: user.email,
         isAdmin: user.isAdmin,
         token: generateToken(user._id),
+        deactivated: user.deactivated,
       });
     } else {
       res.status(400);
@@ -89,6 +96,7 @@ const authUser = asyncHandler(async (req, res) => {
         email: user.email,
         isAdmin: user.isAdmin,
         token: generateToken(user._id),
+        deactivated: user.deactivated,
       });
     } else {
       res.status(401);
@@ -109,6 +117,7 @@ const authUser = asyncHandler(async (req, res) => {
         email: userCreated.email,
         isAdmin: userCreated.isAdmin,
         token: generateToken(userCreated._id),
+        deactivated: user.deactivated,
       });
     } else {
       res.status(400);
@@ -182,6 +191,7 @@ const getUserProfile = asyncHandler(async (req, res) => {
           isAdmin: user.isAdmin,
           password: true,
           home: user.home,
+          deactivated: user.deactivated,
         });
       } else {
         res.json({
@@ -193,6 +203,7 @@ const getUserProfile = asyncHandler(async (req, res) => {
           title: user.title,
           isAdmin: user.isAdmin,
           home: user.home,
+          deactivated: user.deactivated,
           password: false,
         });
       }
@@ -207,6 +218,7 @@ const getUserProfile = asyncHandler(async (req, res) => {
           title: user.title,
           home: user.home,
           password: true,
+          deactivated: user.deactivated,
         });
       } else {
         res.json({
@@ -218,6 +230,7 @@ const getUserProfile = asyncHandler(async (req, res) => {
           title: user.title,
           home: user.home,
           password: false,
+          deactivated: user.deactivated,
         });
       }
     }
@@ -311,6 +324,106 @@ const deleteUser = asyncHandler(async (req, res) => {
   } else {
     res.status(404);
     throw new Error("User not found");
+  }
+});
+
+const sendDeactivationOTP = asyncHandler(async (req, res) => {
+  const { otp, email, id } = req.body;
+  const user = await User.findById(id);
+  if (user) {
+    console.log(user.name);
+    const messageData = {
+      from: "no-reply <admin@getstellr.io>",
+      to: email,
+      subject: `One Time Password (OTP for account deactivation)`,
+      html: `${TemplateTwo(
+        `Your one time password for account deactivation`,
+        user.name,
+        `All of your data will be saved in our servers but you will not be able to login with the same account untill recovered. Please use the following code to deactivate your account.`,
+        `${otp}`,
+        `https://app.getstellr.io/`,
+        `© Stellr Tech Solutions Private Limited`
+      )}`,
+    };
+
+    client.messages
+      .create("getstellr.io", messageData)
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.error(err);
+        // throw new Error("There was an error");
+      });
+
+    res.json({ message: "Success" });
+  }
+});
+
+const sendActivationOTP = asyncHandler(async (req, res) => {
+  const { otp, email, id } = req.body;
+  const user = await User.findById(id);
+  if (user) {
+    console.log(user.name);
+    const messageData = {
+      from: "no-reply <admin@getstellr.io>",
+      to: email,
+      subject: `Account Recovery: One Time Password (OTP for account activation)`,
+      html: `${TemplateTwo(
+        `Your one time password for account activation`,
+        user.name,
+        `All of your data will be retrieved and you will be able to login with the same account and password.`,
+        `${otp}`,
+        `https://app.getstellr.io/`,
+        `© Stellr Tech Solutions Private Limited`
+      )}`,
+    };
+
+    client.messages
+      .create("getstellr.io", messageData)
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.error(err);
+        // throw new Error("There was an error");
+      });
+
+    res.json({ message: "Success" });
+  }
+});
+
+const userAccountDeactivation = asyncHandler(async (req, res) => {
+  const { email, id } = req.body;
+  const user = await User.findById(id);
+  if (user) {
+    user.deactivated = true;
+    const updatedUser = await user.save();
+    res.json({
+      _id: updatedUser._id,
+      name: updatedUser.name,
+      email: updatedUser.email,
+      isAdmin: updatedUser.isAdmin,
+    });
+  } else {
+    throw new Error("Invalid Auth");
+  }
+});
+
+const userAccountActivation = asyncHandler(async (req, res) => {
+  const { email, id } = req.body;
+  const user = await User.findById(id);
+  if (user) {
+    user.deactivated = false;
+    const updatedUser = await user.save();
+    res.json({
+      _id: updatedUser._id,
+      name: updatedUser.name,
+      email: updatedUser.email,
+      isAdmin: updatedUser.isAdmin,
+    });
+  } else {
+    throw new Error("Invalid Auth");
   }
 });
 
@@ -418,4 +531,8 @@ export {
   checkPasswordUser,
   updateUserPassword,
   getUserMetricsIndividual,
+  sendDeactivationOTP,
+  userAccountDeactivation,
+  sendActivationOTP,
+  userAccountActivation,
 };

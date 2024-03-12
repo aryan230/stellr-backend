@@ -6,6 +6,11 @@ const userSchema = mongoose.Schema(
       type: String,
       required: false,
     },
+    deactivated: {
+      type: Boolean,
+      default: false,
+      required: true,
+    },
     accountConfig: {
       type: Boolean,
       default: false,

@@ -36,6 +36,11 @@ const organizationSchema = mongoose.Schema(
         userEmail: {
           type: String,
         },
+        userStatus: {
+          type: String,
+          default: "Joined",
+          required: true,
+        },
         userType: {
           type: String,
           default: "Lab Member",

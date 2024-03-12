@@ -13,9 +13,13 @@ import {
   googleAuth,
   microsoftAuth,
   registerUser,
+  sendActivationOTP,
+  sendDeactivationOTP,
   updateUser,
   updateUserPassword,
   updateUserProfile,
+  userAccountActivation,
+  userAccountDeactivation,
 } from "../controllers/userController.js";
 import { admin, protect } from "../middleware/authMiddleware.js";
 const router = express.Router();
@@ -40,6 +44,15 @@ router
   .put(protect, updateUserPassword);
 
 router.route("/userMetrics").get(protect, admin, getUserMetrics);
+router
+  .route("/deactivate")
+  .post(protect, sendDeactivationOTP)
+  .put(protect, userAccountDeactivation);
+
+router
+  .route("/activate")
+  .post(protect, sendActivationOTP)
+  .put(protect, userAccountActivation);
 
 router
   .route("/:id")
