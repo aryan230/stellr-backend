@@ -22,10 +22,14 @@ import {
   removeCollabratorOrg,
   updateCollabRoleOrg,
   updateCollabStatusOrg,
+  updateOrganizationProfile,
 } from "../controllers/organizationController.js";
 const router = express.Router();
 router.route("/myorgs").get(protect, getMyOrganizations);
-router.route("/:id").get(getProjectsById).put(protect, updateProjectProfile);
+router
+  .route("/:id")
+  .get(getProjectsById)
+  .put(protect, updateOrganizationProfile);
 router.route("/").post(protect, addNewOrganization);
 router.route("/").get(protect, getAllProjects);
 router

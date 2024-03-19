@@ -203,6 +203,23 @@ const addOrgLogs = asyncHandler(async (req, res) => {
   }
 });
 
+const updateOrganizationProfile = asyncHandler(async (req, res) => {
+  const project = await Organization.findById(req.params.id);
+  if (project) {
+    (project.name = req.body.name || project.name),
+      (project.description = req.body.description || project.description);
+    const updatedProject = await project.save();
+    res.json({
+      _id: updatedProject._id,
+      name: updatedProject.name,
+      description: updatedProject.description,
+    });
+  } else {
+    res.status(404);
+    throw new Error("No Project Found");
+  }
+});
+
 export {
   addNewOrganization,
   getMyOrganizations,
@@ -214,4 +231,5 @@ export {
   getMyDataOrganizations,
   updateCollabStatusOrg,
   addOrgLogs,
+  updateOrganizationProfile,
 };
