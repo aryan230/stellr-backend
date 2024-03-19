@@ -14,12 +14,14 @@ import { protect } from "../middleware/authMiddleware.js";
 import {
   addCollabratorOrg,
   addNewOrganization,
+  addOrgLogs,
   getCollabOrganizations,
   getMyDataOrganizations,
   getMyOrganizations,
   joinAnOrg,
   removeCollabratorOrg,
   updateCollabRoleOrg,
+  updateCollabStatusOrg,
 } from "../controllers/organizationController.js";
 const router = express.Router();
 router.route("/myorgs").get(protect, getMyOrganizations);
@@ -32,6 +34,8 @@ router
   .delete(protect, removeCollabratorOrg);
 router.route("/collab/:id").get(protect, getCollabOrganizations);
 router.route("/join").post(protect, joinAnOrg);
+router.route("/collab/update/status").post(protect, updateCollabStatusOrg);
+router.route("/logs").post(addOrgLogs);
 router.route("/collab/update").post(protect, updateCollabRoleOrg);
 router.route("/orgData").post(getMyDataOrganizations);
 export default router;

@@ -158,6 +158,21 @@ const removeCollabratorOrg = asyncHandler(async (req, res) => {
   }
 });
 
+const updateCollabStatusOrg = asyncHandler(async (req, res) => {
+  const { projectId, id, status } = req.body;
+  const project = await Organization.findById(projectId);
+  if (project) {
+    let collabs = project.collaborators;
+    const objIndex = collabs.findIndex((el) => el.user == id);
+    collabs[objIndex].userStatus = status;
+    const updatedProject = await project.save();
+    res.json(updatedProject);
+  } else {
+    res.status(404);
+    throw new Error("No Project Found");
+  }
+});
+
 const updateCollabRoleOrg = asyncHandler(async (req, res) => {
   const { role, projectId, id, permissions } = req.body;
   const project = await Organization.findById(projectId);
@@ -174,6 +189,20 @@ const updateCollabRoleOrg = asyncHandler(async (req, res) => {
   }
 });
 
+const addOrgLogs = asyncHandler(async (req, res) => {
+  const { entryId, logDetails } = req.body;
+  const entry = await Organization.findById(entryId);
+  if (entry) {
+    let newLogs = entry.logs;
+    newLogs.push(logDetails);
+    entry.logs = newLogs;
+    const updatedEntry = await entry.save();
+    res.json(updatedEntry);
+  } else {
+    throw new Error(" No org with id");
+  }
+});
+
 export {
   addNewOrganization,
   getMyOrganizations,
@@ -183,4 +212,6 @@ export {
   updateCollabRoleOrg,
   joinAnOrg,
   getMyDataOrganizations,
+  updateCollabStatusOrg,
+  addOrgLogs,
 };
