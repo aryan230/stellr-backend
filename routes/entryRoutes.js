@@ -29,6 +29,4 @@ router.route("/status/:id").put(updateEntryStatus);
 router.route("/").post(protect, addNewEntry);
 router.route("/vc").post(addVersionControl);
 router.route("/logs").post(addEntryLogs);
-
-
 export default router;
