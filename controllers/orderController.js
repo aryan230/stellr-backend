@@ -6,7 +6,7 @@ const addOrderItems = asyncHandler(async (req, res) => {
     req.body;
 
   if (orderCourse && orderCourse.length === 0) {
-    res.status(401);
+    res.status(402);
     throw new Error("No order items");
     return;
   } else {
