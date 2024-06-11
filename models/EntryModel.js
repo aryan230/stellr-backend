@@ -81,6 +81,25 @@ const entrySchema = mongoose.Schema(
         },
       },
     ],
+    versionControlNew: [
+      {
+        user: {
+          type: String,
+        },
+        userName: {
+          type: String,
+        },
+        userEmail: {
+          type: String,
+        },
+        date: {
+          type: Number,
+        },
+        oldData: {
+          type: Object,
+        },
+      },
+    ],
     versionControl: [
       {
         user: {
@@ -120,8 +139,8 @@ const entrySchema = mongoose.Schema(
           type: Number,
         },
         anyData: {
-          type: String
-        }
+          type: String,
+        },
       },
     ],
   },

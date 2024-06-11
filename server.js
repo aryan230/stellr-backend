@@ -107,21 +107,22 @@ io.on("connection", (socket) => {
   // Notifications End
 
   socket.on("get-document", async ({ documentId }) => {
+    let users = [];
     const document = await findOrCreateDocument(documentId);
 
     socket.join(documentId);
 
     socket.on("joinLobby", (user) => {
-      console.log(user);
-      socket.user = user;
+      console.log(users);
+      users.push(user);
       // Store user's name in a data structure or database
       // Broadcast to other clients in the lobby
-      socket.broadcast.to(documentId).emit("userJoined", user);
+      socket.broadcast.to(documentId).emit("userJoined", users);
     });
 
     socket.on("disconnect", () => {
-      const user = socket.user;
-      socket.broadcast.to(documentId).emit("userLeft", user);
+      // const user = socket.user;
+      // socket.broadcast.to(documentId).emit("userLeft", user);
     });
 
     socket.emit("load-document", {
@@ -131,6 +132,82 @@ io.on("connection", (socket) => {
     socket.on("send-changes", (delta) => {
       console.log(delta.ops);
       socket.broadcast.to(documentId).emit("receive-changes", delta);
+    });
+
+    socket.on("save-vc", async (data) => {
+      const entry = await Entry.findById(documentId);
+      if (entry) {
+        if (entry.versionControlNew && entry.versionControlNew.length > 0) {
+          const ms2 = new Date(
+            entry.versionControlNew.sort(function (a, b) {
+              return new Date(b.date) - new Date(a.date);
+            })[0].date
+          ).getTime();
+          const ms1 = new Date().getTime();
+          if (Math.floor((ms1 - ms2) / 1000 / 60) > 2) {
+            await Entry.findByIdAndUpdate(documentId, {
+              versionControlNew: [
+                ...entry.versionControlNew,
+                {
+                  user: data.user,
+                  userName: data.userName,
+                  userEmail: data.userEmail,
+                  date: Date.now(),
+                  oldData: data.data,
+                },
+              ],
+            });
+            socket.broadcast
+              .to(documentId)
+              .emit("receive-vc-update", "created new vc after 15mins time");
+          } else {
+            let newLogs = entry.versionControlNew;
+            const index = await newLogs.indexOf(
+              newLogs.sort(function (a, b) {
+                return new Date(b.date) - new Date(a.date);
+              })[0]
+            );
+
+            if (index !== -1) {
+              newLogs[index].oldData = data.data;
+              await Entry.findByIdAndUpdate(documentId, {
+                versionControlNew: newLogs,
+              });
+            }
+          }
+        } else {
+          await Entry.findByIdAndUpdate(documentId, {
+            versionControlNew: [
+              ...entry.versionControlNew,
+              {
+                user: data.user,
+                userName: data.userName,
+                userEmail: data.userEmail,
+                date: Date.now(),
+                oldData: data.data,
+              },
+            ],
+          });
+
+          socket.broadcast
+            .to(documentId)
+            .emit("receive-vc-update", "created new vc");
+        }
+
+        // const ms2 = new Date(entry.versionControlNew)
+        // const ms1 = new Date().getTime();
+        // console.log(Math.floor((ms1 - ms2) / 1000 / 60));
+      }
+      // await Entry.findByIdAndUpdate(documentId, {
+      //   data: {
+      //     user: data.user,
+      //     block: data.data,
+      //     date: Date.now(),
+      //   },
+      // });
+
+      // entry.data = [,];
+      // const updatedEntry = await entry.save();
     });
 
     socket.on("save-document", async (data) => {

@@ -67,15 +67,33 @@ const addVersionControl = asyncHandler(async (req, res) => {
   }
 });
 
+const updateVersionControlNew = asyncHandler(async (req, res) => {
+  const { entryId, logDetails } = req.body;
+  const entry = await Entry.findById(entryId);
+  if (entry) {
+    const ms2 = new Date(entry.updatedAt).getTime();
+    const ms1 = new Date().getTime();
+    console.log(ms1 - ms2);
+    // let newLogs = entry.versionControlNew;
+    // newLogs.push(logDetails);
+    // entry.versionControlNew = newLogs;
+    // const updatedEntry = await entry.save();
+    // res.json(updatedEntry);
+  } else {
+    throw new Error("No entry with id");
+  }
+});
+
 const updateEntryProfile = asyncHandler(async (req, res) => {
-  console.log(req.body)
+  console.log(req.body);
   const project = await Entry.findById(req.params.id);
   if (project) {
     (project.name = req.body.name || project.name),
-    (project.submittedForApproval =
-      req.body.submittedForApproval || project.submittedForApproval),
-    (project.isEdit = req.body.isEdit || project.isEdit),
-    (project.authorSubmitted = req.body.authorSubmitted || project.authorSubmitted);
+      (project.submittedForApproval =
+        req.body.submittedForApproval || project.submittedForApproval),
+      (project.isEdit = req.body.isEdit || project.isEdit),
+      (project.authorSubmitted =
+        req.body.authorSubmitted || project.authorSubmitted);
     const updatedProject = await project.save();
     res.json({
       _id: updatedProject._id,
@@ -90,7 +108,7 @@ const updateEntryProfile = asyncHandler(async (req, res) => {
 
 const updateEntryStatus = asyncHandler(async (req, res) => {
   const project = await Entry.findById(req.params.id);
-  console.log(req.body)
+  console.log(req.body);
   if (project) {
     project.status = req.body.status || project.status;
     project.isEdit = req.body.isEdit;
@@ -159,4 +177,5 @@ export {
   converUpdateEntry,
   updateEntryStatus,
   updateEntryShare,
+  updateVersionControlNew,
 };

@@ -11,14 +11,16 @@ import {
   updateEntryProfile,
   updateEntryShare,
   updateEntryStatus,
+  updateVersionControlNew,
 } from "../controllers/entryController.js";
 const router = express.Router();
+router.route("/newvc").put(updateVersionControlNew);
+
 router
   .route("/:id")
   .get(getMyEntries)
   .put(protect, updateEntryProfile)
   .delete(protect, deleteEntry);
-
 router
   .route("/share/:id")
   .get(protect, getEntriesById)
