@@ -144,7 +144,7 @@ io.on("connection", (socket) => {
             })[0].date
           ).getTime();
           const ms1 = new Date().getTime();
-          if (Math.floor((ms1 - ms2) / 1000 / 60) > 2) {
+          if (Math.floor((ms1 - ms2) / 1000 / 60) > 10) {
             await Entry.findByIdAndUpdate(documentId, {
               versionControlNew: [
                 ...entry.versionControlNew,
