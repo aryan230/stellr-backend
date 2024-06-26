@@ -106,23 +106,40 @@ io.on("connection", (socket) => {
 
   // Notifications End
 
-  socket.on("get-document", async ({ documentId }) => {
-    let users = [];
+  socket.on("get-document", async ({ documentId, user }) => {
     const document = await findOrCreateDocument(documentId);
 
     socket.join(documentId);
+    socket.user = user;
 
-    socket.on("joinLobby", (user) => {
-      console.log(users);
-      users.push(user);
-      // Store user's name in a data structure or database
-      // Broadcast to other clients in the lobby
-      socket.broadcast.to(documentId).emit("userJoined", users);
+    socket.on("join-lobby", async ({ id }) => {
+      console.log(id);
+      const clients = Array.from(
+        io.sockets.adapter.rooms.get(documentId) || []
+      );
+      const users = clients
+        .map((clientId) => {
+          const clientSocket = io.sockets.sockets.get(clientId);
+          return clientSocket ? clientSocket.user : null;
+        })
+        .filter((user) => user !== null);
+      await Promise.all(users);
+      socket.broadcast.to(documentId).emit("get_users_in_room", users);
     });
 
-    socket.on("disconnect", () => {
-      // const user = socket.user;
-      // socket.broadcast.to(documentId).emit("userLeft", user);
+    socket.on("disconnect", async () => {
+      const user = socket.user;
+      const clients = Array.from(
+        io.sockets.adapter.rooms.get(documentId) || []
+      );
+      const users = clients
+        .map((clientId) => {
+          const clientSocket = io.sockets.sockets.get(clientId);
+          return clientSocket ? clientSocket.user : null;
+        })
+        .filter((user) => user !== null);
+      await Promise.all(users);
+      socket.broadcast.to(documentId).emit("get_users_in_room", users);
     });
 
     socket.emit("load-document", {
